@@ -1,0 +1,28 @@
+{
+	"name":"metal/helper",
+	"description":"PHP项目日常开发必备基础库，数组工具类、字符串工具类、数字工具类、函数工具类、服务器工具类、加密工具类",
+	"type":"library",
+	"version":"1.0.0",
+	"authors":[
+		{
+			"name":"metal",
+			"email":"935216773@qq.com"
+		}
+	],
+	"autoload":{
+		"psr-4":{
+			"metal\\helper\\":"src/"
+		}
+	},
+	"license":"Apache-2.0",
+	"minimum-stability":"stable",
+	"require":{
+		"ext-json":"*",
+		"ext-openssl":"*",
+		"ext-mbstring":"*",
+		"ext-iconv":"*",
+		"ext-ctype":"*",
+		"ext-libxml":"*",
+		"ext-simplexml":"*"
+	}
+}

@@ -2,6 +2,7 @@
 PHP项目常用助手函数，涵盖了Array,String,Time,Server,File,Number等
 
 ```PHP
+
 use metal\helper;
  
  public function index()

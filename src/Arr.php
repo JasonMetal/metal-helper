@@ -13,7 +13,7 @@ namespace  metal\helper;
 final class Arr{
 
 
-    protected static function p($data, $mark = '')
+    public static function p($data, $mark = '')
     {
         // 定义样式
         $str = '<pre style="display: block;width:2000px;padding: 9.5px;margin: 14px 0 0 0;font-size: 15px;line-height: 1.42857;color: #0b7500;word-break: break-all;word-wrap: break-word;background-color: #F5F5F5;border: 1px solid #CCC;border-radius: 4px;">';
@@ -31,9 +31,9 @@ final class Arr{
         echo $str;
     }
 
-	protected static function dd($result,$mark = '')
+    public static function dd($result,$mark = '')
     {
-        p($result,$mark);
+        self::p($result,$mark);
         exit();
         echo '</pre>';
 	}

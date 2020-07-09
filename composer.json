@@ -2,7 +2,7 @@
 	"name":"metal/helper",
 	"description":"PHP项目常用助手函数，涵盖了Array,String,Time,Server,File,Number,Other(ext)等",
 	"type":"library",
-	"version":"1.0.7",
+	"version":"1.0.8",
 	"authors":[
 		{
 			"name":"metal",

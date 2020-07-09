@@ -1,10 +1,7 @@
 <?php
 /**
- * 
- *
  * @copyright (c) 2015~2020 Metal All rights reserved.
  * @license http://www.apache.org/licenses/LICENSE-2.0
- * @author BD<657306123@qq.com>
  */
 
 namespace metal\helper;
@@ -16,6 +13,24 @@ namespace metal\helper;
  */
 final class Str
 {
+
+
+     /**
+     * 获取变量名
+     * 例如 get_variable_name($a, get_defined_vars())
+     * @var string
+     */
+    protected static function get_variable_name(&$var, $scope = null)
+    {
+
+        $scope = $scope == null ? $GLOBALS : $scope; // 如果没有范围则在globals中找寻
+        $tmp = $var;
+        $var  = 'tmp_value_' . mt_rand();
+        $name = array_search($var, $scope, true); // 根据值查找变量名称
+        $var = $tmp;
+        return $name;
+    }
+
 
     /**
      * 驼峰转下划线缓存

@@ -12,6 +12,33 @@ namespace  metal\helper;
  */
 final class Arr{
 
+
+    protected static function p($data, $mark = '')
+    {
+        // 定义样式
+        $str = '<pre style="display: block;width:2000px;padding: 9.5px;margin: 14px 0 0 0;font-size: 15px;line-height: 1.42857;color: #0b7500;word-break: break-all;word-wrap: break-word;background-color: #F5F5F5;border: 1px solid #CCC;border-radius: 4px;">';
+        // 如果是boolean或者null直接显示文字；否则print
+        if (is_bool($data)) {
+            $show_data = $data ? 'true' : 'false';
+        } elseif (is_null($data)) {
+            $show_data = 'null';
+        } else {
+            $show_data = print_r($data, true);
+        }
+        $str .= $mark . " => ";
+        $str .= $show_data;
+        $str .= '</pre>';
+        echo $str;
+    }
+
+	protected static function dd($result,$mark = '')
+    {
+        p($result,$mark);
+        exit();
+        echo '</pre>';
+	}
+	
+
 	/**
 	 * 是否为关联数组
 	 *

@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright (c) 2015~2020 Metal All rights reserved.
+ * @license http://www.apache.org/licenses/LICENSE-2.0
+ */
+
 namespace  metal\helper;
 
 class Time{

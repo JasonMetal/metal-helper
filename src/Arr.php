@@ -1,10 +1,7 @@
 <?php
 /**
- * I know no such things as genius,it is nothing but labor and diligence.
- *
- * @copyright (c) 2015~2019 BD All rights reserved.
+
  * @license http://www.apache.org/licenses/LICENSE-2.0
- * @author BD<657306123@qq.com>
  */
 namespace  metal\helper;
 
@@ -125,7 +122,10 @@ final class Arr{
 			$keys = array_keys(current($array));
 		}
 
-		foreach($keys as $index => $key) $result[$index] = [];
+		foreach($keys as $index => $key){
+			$result[$index] = [];
+		}
+
 		foreach($array as $item){
 			foreach($keys as $index => $key){
 				$result[$index][] = isset($item[$key]) ? $item[$key] : null;
@@ -133,6 +133,27 @@ final class Arr{
 		}
 
 		return $result;
+	}
+
+	/**
+	 * 数组去重-二维数组
+	 * @param array  $array
+	 * @param string $key
+	 * @return array
+	 */
+	public static function multiUnique($array, $key){
+		$i = 0;
+		$temp_array = [];
+		$key_array = [];
+
+		foreach($array as $val){
+			if(!in_array($val[$key], $key_array)){
+				$key_array[$i] = $val[$key];
+				$temp_array[$i] = $val;
+			}
+			$i++;
+		}
+		return $temp_array;
 	}
 
 	/**
@@ -194,4 +215,106 @@ final class Arr{
 		};
 		return $handler($list, $child);
 	}
+
+	/**
+	 * 转换数组里面的key
+	 *
+	 * @param array $arr
+	 * @param array $keyMaps
+	 * @return array
+	 */
+	public static function transformKeys(array $arr, array $keyMaps){
+		foreach($keyMaps as $oldKey => $newKey){
+			if(!array_key_exists($oldKey, $arr)) continue;
+
+			if(is_callable($newKey)){
+				list($newKey, $value) = call_user_func($newKey, $arr[$oldKey], $oldKey, $arr);
+				$arr[$newKey] = $value;
+			}else{
+				$arr[$newKey] = $arr[$oldKey];
+			}
+			unset($arr[$oldKey]);
+		}
+		return $arr;
+	}
+
+    /**
+     * 获得所有父级栏目
+     *
+     * @param array  $data 栏目数据
+     * @param int    $sid 子栏目
+     * @param string $primaryId 唯一键名，如果是表则是表的主键
+     * @param string $parentId 父ID键名
+     * @return array
+     */
+    public static function getParentChannel(array $data, int $sid, $primaryId = 'id', $parentId = 'pid')
+    {
+        if (empty($data)) {
+            return $data;
+        }
+
+        $arr = [];
+        foreach ($data as $v) {
+            if ($v[$primaryId] == $sid) {
+                $arr[] = $v;
+                $_n    = self::getParentChannel($data, $v[$primaryId], $primaryId, $parentId);
+                if (!empty($_n)) {
+                    $arr = array_merge($arr, $_n);
+                }
+            }
+        }
+
+        return $arr;
+    }
+
+
+    /**
+     * 获取除指定键数组外的所有给定数组。
+     *
+     * @param array $array 原数组
+     * @param array $keys 要舍去的key
+     *
+     * @return array
+     * @author King
+     */
+    public static function except(array $array, array $keys)
+    {
+        return array_diff_key($array, array_flip($keys));
+    }
+
+    /**
+     * 二分查找
+     *
+     * @param int|float $number 查找数
+     * @param array     $array 待查找区间
+     *
+     * @return int
+     * @author King
+     */
+    public static function binarySearch($number, array $array)
+    {
+        if (!is_array($array) || empty($array)) {
+            return -1;
+        }
+
+        sort($array);
+
+        $length = count($array);
+        $lower  = 0;
+        $high   = $length - 1;
+
+        while ($lower < $high) {
+            $middle = intval(($lower + $high) / 2);
+            if ($array[$middle] > $number) {
+                $high = $middle - 1;
+            } elseif ($array[$middle] < $number) {
+                $lower = $middle + 1;
+            } else {
+                return $middle;
+            }
+        }
+
+        return -1;
+    }
+
 }

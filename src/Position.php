@@ -1,8 +1,8 @@
 <?php
 /**
- * I know no such things as genius,it is nothing but labor and diligence.
+ * 
  *
- * @copyright (c) 2015~2019 BD All rights reserved.
+ * @copyright (c) 2015~2020 Metal All rights reserved.
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @author BD<657306123@qq.com>
  */
@@ -48,7 +48,7 @@ final class Position{
 		$dLon = ($dLon * 180.0) / (self::A / $sqrtMagic * cos($radLat) * self::PI);
 		$mgLat = $lat + $dLat;
 		$mgLon = $lon + $dLon;
-		return array($mgLat, $mgLon);
+		return [$mgLat, $mgLon];
 	}
 
 	/**
@@ -113,7 +113,7 @@ final class Position{
 		$theta = atan2($y, $x) + 0.000003 * cos($x * self::PI);
 		$bd_lon = $z * cos($theta) + 0.0065;
 		$bd_lat = $z * sin($theta) + 0.006;
-		return array($bd_lat, $bd_lon);
+		return [$bd_lat, $bd_lon];
 	}
 
 	/**
@@ -125,8 +125,7 @@ final class Position{
 	 */
 	public static function bd09ToGps84($bd_lat, $bd_lon){
 		$gcj02 = self::bd09ToGcj02($bd_lat, $bd_lon);
-		$map84 = self::gcjToGps84($gcj02[0], $gcj02[1]);
-		return $map84;
+		return self::gcjToGps84($gcj02[0], $gcj02[1]);
 	}
 
 	/**
@@ -143,7 +142,7 @@ final class Position{
 		$theta = atan2($y, $x) - 0.000003 * cos($x * self::PI);
 		$gg_lon = $z * cos($theta);
 		$gg_lat = $z * sin($theta);
-		return array($gg_lat, $gg_lon);
+		return [$gg_lat, $gg_lon];
 	}
 
 	/**
@@ -157,7 +156,7 @@ final class Position{
 		$gps = self::transform($lat, $lon);
 		$latitude = $lat * 2 - $gps[0];
 		$longitude = $lon * 2 - $gps[1];
-		return array($latitude, $longitude);
+		return [$latitude, $longitude];
 	}
 
 	/**
@@ -169,7 +168,7 @@ final class Position{
 	 */
 	public static function transform($lat, $lon){
 		if(self::outOfChina($lat, $lon)){
-			return array($lat, $lon);
+			return [$lat, $lon];
 		}
 		$dLat = self::transformLat($lon - 105.0, $lat - 35.0);
 		$dLon = self::transformLon($lon - 105.0, $lat - 35.0);
@@ -181,7 +180,7 @@ final class Position{
 		$dLon = ($dLon * 180.0) / (self::A / $sqrtMagic * cos($radLat) * self::PI);
 		$mgLat = $lat + $dLat;
 		$mgLon = $lon + $dLon;
-		return array($mgLat, $mgLon);
+		return [$mgLat, $mgLon];
 	}
 
 }

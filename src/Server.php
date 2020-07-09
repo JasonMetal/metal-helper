@@ -1,10 +1,10 @@
 <?php
 /**
- * I know no such things as genius,it is nothing but labor and diligence.
+ * 
  *
- * @copyright (c) 2015~2019 BD All rights reserved.
+ * @copyright (c) 2015~2020 Metal All rights reserved.
  * @license       http://www.apache.org/licenses/LICENSE-2.0
- * @author        <657306123@qq.com> LXSEA
+ * 
  */
 
 namespace  metal\helper;
@@ -233,8 +233,9 @@ final class Server{
 		if(isset ($_SERVER['HTTP_ACCEPT'])){
 			// 如果只支持wml并且不支持html那一定是移动设备
 			// 如果支持wml和html但是wml在html之前则是移动设备
-			if((strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') !== false) && (strpos($_SERVER['HTTP_ACCEPT'], 'text/html') === false ||
-					(strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') < strpos($_SERVER['HTTP_ACCEPT'], 'text/html')))){
+			if((strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') !== false)
+				&& (strpos($_SERVER['HTTP_ACCEPT'], 'text/html') === false
+					|| (strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') < strpos($_SERVER['HTTP_ACCEPT'], 'text/html')))){
 				return true;
 			}
 		}

@@ -1,8 +1,8 @@
 <?php
 /**
- * I know no such things as genius,it is nothing but labor and diligence.
+ * 
  *
- * @copyright (c) 2015~2019 BD All rights reserved.
+ * @copyright (c) 2015~2020 Metal All rights reserved.
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @author BD<657306123@qq.com>
  */
@@ -51,6 +51,28 @@ final class Num{
 		$units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
 		for($i = 0; $size >= 1024 && $i < 5; $i++) $size /= 1024;
 		return round($size, 2).$delimiter.$units[$i];
+	}
+
+	/**
+	 * 人性化数字
+	 *
+	 * @param int $num
+	 * @return string
+	 */
+	public static function formatSimple($num){
+		if($num < 1000){
+			return $num;
+		}
+
+		if($num < 10000){
+			return round($num / 1000, 2)."千";
+		}
+
+		if($num < 100000000){
+			return round($num / 10000, 2)."万";
+		}
+
+		return round($num / 100000000, 2)."亿";
 	}
 
 	/**

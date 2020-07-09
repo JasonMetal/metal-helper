@@ -1,8 +1,8 @@
 <?php
 /**
- * I know no such things as genius,it is nothing but labor and diligence.
+ * 
  *
- * @copyright (c) 2015~2019 BD All rights reserved.
+ * @copyright (c) 2015~2020 Metal All rights reserved.
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @author BD<657306123@qq.com>
  */
@@ -152,7 +152,7 @@ final class Secure{
 		for($i = 0; $i < $len; $i++){
 			$str .= chr(ord(substr($data, $i, 1)) + (ord(substr($char, $i, 1))) % 256);
 		}
-		return str_replace(array('+', '/', '='), array('-', '_', ''), base64_encode($str));
+		return str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($str));
 	}
 
 	/**
@@ -165,7 +165,7 @@ final class Secure{
 	 */
 	public static function decrypt($data, $key = ''){
 		$key = md5($key);
-		$data = str_replace(array('-', '_'), array('+', '/'), $data);
+		$data = str_replace(['-', '_'], ['+', '/'], $data);
 		$mod4 = strlen($data) % 4;
 		if($mod4){
 			$data .= substr('====', $mod4);

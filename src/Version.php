@@ -101,4 +101,63 @@ final class Version{
 		$res = self::check($current, $new);
 		return $res === -1 || $res === 0;
 	}
+
+	/**
+	 * 版本转化 eg:3002001 => 3.2.1
+	 * @param $version
+	 * @return string
+	 */
+	public static function toVersionCode($version) {
+		// eg:3002001 => 3.2.1
+		$versionCode = str_pad($version,9,"0",STR_PAD_LEFT);
+		$version1    = ltrim(substr($versionCode, 0,3), 0) | "0";
+		$version2    = ltrim(substr($versionCode, 3,3), 0) | "0";
+		$version3    = ltrim(substr($versionCode, 6,3), 0) | "0";
+		$versionCode = $version1.".".$version2.".".$version3;
+		return $versionCode;
+	}
+
+	/**
+	 * 版本转化 eg:3.2.1 => 3002001
+	 * @param $version
+	 * @return string
+	 */
+	public static function toVersionNum($version) {
+		// eg:3.2.1 => 3002001
+		$versionArr  = explode(".", $version);
+		$version1    = $versionArr[0];
+		$version2    = str_pad($versionArr[1],3,"0",STR_PAD_LEFT);
+		$version3    = str_pad($versionArr[2],3,"0",STR_PAD_LEFT);
+		$versionNum  = ltrim($version1.$version2.$version3, "0");
+		return $versionNum;
+	}
+
+	/**
+	 * 版本比较
+	 * @param  string $v1
+	 * @param string $v2
+	 * @return int
+	 * */
+	public static function compare_version($v1,$v2){
+		$v1 = explode('.',$v1);
+		$v2 = explode('.',$v2);
+		$length = max(count($v1),count($v2));
+		while (count($v1) < $length){
+			array_push($v1,0);
+		}
+		while (count($v2) < $length){
+			array_push($v2,0);
+		}
+		for($i = 0;$i<$length;$i++){
+			$num1 = (int)$v1[$i];
+			$num2 = (int)$v2[$i];
+			if($num1 > $num2){
+				return 1;
+			}
+			else if($num1 < $num2){
+				return -1;
+			}
+		}
+		return 0;
+	}
 }

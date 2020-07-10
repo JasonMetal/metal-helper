@@ -7,7 +7,7 @@
 namespace metal\helper;
 use Exception;
 
-class Aes
+final class Aes
 {
     /**
      * var string $method 加解密方法，可通过openssl_get_cipher_methods()获得

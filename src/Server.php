@@ -58,7 +58,7 @@ final class Server{
 	 *
 	 * @return string
 	 */
-	public static function getHostName(){
+    public static function getServerName(){
 		return $_SERVER ['SERVER_NAME'];
 	}
 

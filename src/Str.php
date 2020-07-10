@@ -378,36 +378,6 @@ final class Str
     }
 
     /**
-     * 创建一个随机名字
-     *
-     * @param string $firstName
-     * @param int $lastNameLength 名字字数
-     * @param string $delimiter
-     * @return string
-     */
-    public static function createName($firstName = null, $lastNameLength = 2, $delimiter = '')
-    {
-        static $data = null;
-        if (is_null($data)) {
-            $data = require_once './name_config.php';
-        }
-
-        //姓氏
-        if (empty($firstName)) {
-            $len       = count($data['first_name_list']);
-            $firstName = $data['first_name_list'][rand(0, $len - 1)];
-        }
-
-        //名字
-        $len      = count($data['chars']);
-        $lastName = '';
-        for ($i = 0; $i < $lastNameLength; $i++) {
-            $lastName .= $data [rand(0, $len - 1)];
-        }
-        return $firstName . $delimiter . $lastName;
-    }
-
-    /**
      * 解析Url Query
      *
      * @param string $url url地址或URL query参数
@@ -683,6 +653,335 @@ final class Str
     {
         return self::random($lenth, 3);
     }
+ /**
+     * 产生多个随机汉字
+     * 可以创建新用户
+     * @param int $num为生成汉字的数量
+     * @return   string     字符串
+     */
+    public static function getChar($num)  // $num为生成汉字的数量
+    {
+        $b = '';
+        for ($i=0; $i<$num; $i++) {
+        // 使用chr()函数拼接双字节汉字，前一个chr()为高位字节，后一个为低位字节
+            $a = chr(mt_rand(0xB0,0xD0)).chr(mt_rand(0xA1, 0xF0));
+            // 转码
+            $b .= iconv('GB2312', 'UTF-8', $a);
+        }
+        return $b;
+    }
 
+    /**
+    * @param $ary 要md5的数组
+    * @return   string     字符串
+    */
+    public static function arrayMD5($ary, $isKsort = true)
+    {
+        if ($isKsort) {
+            ksort($ary);
+        } else {
+            krsort($ary);
+        }
+        $befStr = '';
+        foreach ( $ary as $k => $v ) {
+            if(!empty($v)){
+                $befStr .= "{$k}={$v}&";
+            }
+        }
+        $befStr = rtrim($befStr, '&');
+        return MD5($befStr);
+    }
+
+      /**
+     * Generate name based md5 gen_union_id (version 3).
+     * @example '7e57d0042b970e7ab45f5387367791cd'
+     * @example '6991bfa4b0834538861d3fd6a40aaef0'
+     */
+    public static function gen_union_id()
+    {
+        // fix for compatibility with 32bit architecture; seed range restricted to 62bit
+        $seed = mt_rand(0, 2147483647) . '#' . mt_rand(0, 2147483647);
+
+        // Hash the seed and convert to a byte array
+        $val  = md5($seed, true);
+        $byte = array_values(unpack('C16', $val));
+
+        // extract fields from byte array
+        $tLo  = ($byte[0] << 24) | ($byte[1] << 16) | ($byte[2] << 8) | $byte[3];
+        $tMi  = ($byte[4] << 8) | $byte[5];
+        $tHi  = ($byte[6] << 8) | $byte[7];
+        $csLo = $byte[9];
+        $csHi = $byte[8] & 0x3f | (1 << 7);
+
+        // correct byte order for big edian architecture
+        if (pack('L', 0x6162797A) == pack('N', 0x6162797A)) {
+            $tLo = (($tLo & 0x000000ff) << 24) | (($tLo & 0x0000ff00) << 8)
+                | (($tLo & 0x00ff0000) >> 8) | (($tLo & 0xff000000) >> 24);
+            $tMi = (($tMi & 0x00ff) << 8) | (($tMi & 0xff00) >> 8);
+            $tHi = (($tHi & 0x00ff) << 8) | (($tHi & 0xff00) >> 8);
+        }
+
+        // apply version number
+        $tHi &= 0x0fff;
+        $tHi |= (3 << 12);
+
+        // cast to string
+        $uuid = sprintf(
+            '%08x%04x%04x%02x%02x%02x%02x%02x%02x%02x%02x',
+            $tLo,
+            $tMi,
+            $tHi,
+            $csHi,
+            $csLo,
+            $byte[10],
+            $byte[11],
+            $byte[12],
+            $byte[13],
+            $byte[14],
+            $byte[15]
+        );
+
+        return strtoupper($uuid);
+    }
+
+    public static function uuid()
+    {
+        // fix for compatibility with 32bit architecture; seed range restricted to 62bit
+        $seed = mt_rand(0, 2147483647) . '#' . mt_rand(0, 2147483647);
+
+        // Hash the seed and convert to a byte array
+        $val  = md5($seed, true);
+        $byte = array_values(unpack('C16', $val));
+
+        // extract fields from byte array
+        $tLo  = ($byte[0] << 24) | ($byte[1] << 16) | ($byte[2] << 8) | $byte[3];
+        $tMi  = ($byte[4] << 8) | $byte[5];
+        $tHi  = ($byte[6] << 8) | $byte[7];
+        $csLo = $byte[9];
+        $csHi = $byte[8] & 0x3f | (1 << 7);
+
+        // correct byte order for big edian architecture
+        if (pack('L', 0x6162797A) == pack('N', 0x6162797A)) {
+            $tLo = (($tLo & 0x000000ff) << 24) | (($tLo & 0x0000ff00) << 8)
+                | (($tLo & 0x00ff0000) >> 8) | (($tLo & 0xff000000) >> 24);
+            $tMi = (($tMi & 0x00ff) << 8) | (($tMi & 0xff00) >> 8);
+            $tHi = (($tHi & 0x00ff) << 8) | (($tHi & 0xff00) >> 8);
+        }
+
+        // apply version number
+        $tHi &= 0x0fff;
+        $tHi |= (3 << 12);
+
+        // cast to string
+        $uuid = sprintf(
+            '%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x',
+            $tLo,
+            $tMi,
+            $tHi,
+            $csHi,
+            $csLo,
+            $byte[10],
+            $byte[11],
+            $byte[12],
+            $byte[13],
+            $byte[14],
+            $byte[15]
+        );
+
+        return $uuid;
+    }
+
+    /**
+     * 判断手机号码格式是否正确
+     * @param $email
+     */
+    public static function is_mobilephone($mobilephone)
+    {
+        return
+            strlen($mobilephone) > 9 && preg_match("/^(((13[0-9]{1})|(14[0-9]{1})|(15[0-9]{1})|(17[0-9]{1})|(18[0-9]{1}))+\d{8})$/", $mobilephone);
+    }
+
+    /**
+     * 手机号码格式转换【18455667788 转为184-5566-7788】
+     * @param type $mobile
+     */
+    public static function mobile2string($mobilephone)
+    {
+        if (!self::is_mobilephone($mobilephone)) {
+            return false;
+        }
+        $char1           = substr($mobilephone, 0, 3);
+        $char2           = substr($mobilephone, 4, 4);
+        $char3           = substr($mobilephone, -4);
+        $new_mobilephone = $char1 . ' ' . $char2 . ' ' . $char3;
+        return $new_mobilephone;
+    }
+
+
+    /**
+     * 手机号码中间四位以‘****’代替
+     * @param type $mobile
+     * return  string
+     */
+    public static function mobile_enctry($mobile) {
+        if (!self::is_mobilephone($mobile)) {
+            return false;
+        }
+        $mobile = substr_replace($mobile, '****', 4, 4);
+        return $mobile;
+    }
+
+    public static function user_name_enctry($mobile) {
+        $mobile = self::truncate_utf8_string($mobile, 3, "****");
+        return $mobile;
+    }
+
+    /**
+     * 汉字转拼音
+     * @param $string 汉字字符串
+     * @param $type 1返回首字母 2返回所有
+     * @param $is_all 是否转换全拼 head转换首字母 all转换全拼
+     * @return $string
+     */
+    public static function zh2pinyin($string, $type = 1, $is_all = 'head')
+    {
+        if (empty($string)) {
+            return '';
+        }
+        $zh2py_class = base::load_sys_class("CUtf8_PY");
+        $str         = $zh2py_class->encode($string, $is_all);
+        if ($type == 1) {
+            $str = substr($str, 0, 1);
+        } else {
+            $str = $str;
+        }
+        return ucwords($str);
+    }
+
+    
+    /**
+     * 查询字符是否存在于某字符串
+     *
+     * @param $haystack 字符串
+     * @param $needle 要查找的字符
+     * @return bool
+     */
+    public static function str_exists($haystack, $needle) {
+        return !(strpos($haystack, $needle) === FALSE);
+    }
+
+    /**
+     * 省份名称转换
+     *
+     * @param string $province 当$province值为空时，直接返回省份数组信息
+     * @param int $type 1：'北京市'=>'北京'，2：'北京'=>'北京市'
+     * @return string or array
+     */
+    public static function replace_province($province, $type = 1) {
+        $tmparr = array('北京' => '北京', '安徽省' => '安徽', '福建省' => '福建', '甘肃省' => '甘肃', '广东省' => '广东', '广西壮族自治区' => '广西', '贵州省' => '贵州', '海南省' => '海南', '河北省' => '河北', '河南省' => '河南', '黑龙江省' => '黑龙江', '湖北省' => '湖北', '湖南省' => '湖南', '吉林省' => '吉林', '江苏省' => '江苏', '江西省' => '江西', '辽宁省' => '辽宁', '内蒙古自治区' => '内蒙古', '宁夏回族自治区' => '宁夏', '青海省' => '青海', '山东省' => '山东', '山西省' => '山西', '陕西省' => '陕西', '上海' => '上海', '四川省' => '四川', '天津' => '天津', '西藏自治区' => '西藏', '新疆维吾尔自治区' => '新疆', '云南省' => '云南', '浙江省' => '浙江', '重庆' => '重庆', '香港特别行政区' => '香港', '澳门特别行政区' => '澳门', '台湾省' => '台湾', '其它' => '其他');
+        if ($province) {
+            if ($type == 2) {
+                $tmparr = array_flip($tmparr);
+            }
+            return $tmparr[$province] ? $tmparr[$province] : $province;
+        }
+        return $tmparr;
+    }
+    /**
+     * 截断utf8字符串
+     *
+     * @param string $string 
+     * @param int $length ：3 
+     * @param string $etc ：'...'
+     * @return string
+     */
+    public static function truncate_utf8_string($string, $length, $etc = '...') {
+        $result = '';
+        $string = html_entity_decode(trim(strip_tags($string)), ENT_QUOTES, 'UTF-8');
+        $strlen = strlen($string);
+        for ($i = 0; (($i < $strlen) && ($length > 0)); $i ++) {
+            if ($number = strpos(str_pad(decbin(ord(substr($string, $i, 1))), 8, '0', STR_PAD_LEFT), '0')) {
+                if ($length < 1.0) {
+                    break;
+                }
+                $result .= substr($string, $i, $number);
+                $length -= 1.0;
+                $i += $number - 1;
+            } else {
+                $result .= substr($string, $i, 1);
+                $length -= 0.5;
+            }
+        }
+        $result = htmlspecialchars($result, ENT_QUOTES, 'UTF-8');
+        if ($i < $strlen) {
+            $result .= $etc;
+        }
+        return $result;
+    }
+
+
+    /**
+     * 金额转为繁体字（最高到千万元）
+     * @param int $num ：300  
+     * @return string 叁佰元
+    */
+    public static function price2zh($num){
+        $c1 = "零壹贰叁肆伍陆柒捌玖";
+        $c2 = "分角元拾佰仟万拾佰仟亿";
+        //精确到分后面就不要了，所以只留两个小数位
+        $num = round($num, 2); 
+        //将数字转化为整数
+        $num = $num * 100;
+        if (strlen($num) > 10) {
+            return "金额太大，请检查";
+        } 
+        $i = 0;
+        $c = "";
+        while (1) {
+            if ($i == 0) {
+                //获取最后一位数字
+                $n = substr($num, strlen($num)-1, 1);
+            } else {
+                $n = $num % 10;
+            }
+            //每次将最后一位数字转化为中文
+            $p1 = substr($c1, 3 * $n, 3);
+            $p2 = substr($c2, 3 * $i, 3);
+            if ($n != '0' || ($n == '0' && ($p2 == '亿' || $p2 == '万' || $p2 == '元'))) {
+                $c = $p1 . $p2 . $c;
+            } else {
+                $c = $p1 . $c;
+            }
+            $i = $i + 1;
+            //去掉数字最后一位了
+            $num = $num / 10;
+            $num = (int)$num;
+            //结束循环
+            if ($num == 0) {
+                break;
+            } 
+        }
+        $j = 0;
+        $slen = strlen($c);
+        while ($j < $slen) {
+            //utf8一个汉字相当3个字符
+            $m = substr($c, $j, 6);
+            //处理数字中很多0的情况,每次循环去掉一个汉字“零”
+            if ($m == '零元' || $m == '零万' || $m == '零亿' || $m == '零零') {
+                $left = substr($c, 0, $j);
+                $right = substr($c, $j + 3);
+                $c = $left . $right;
+                $j = $j-3;
+                $slen = $slen-3;
+            } 
+            $j = $j + 3;
+        } 
+        //这个是为了去掉类似23.0中最后一个“零”字
+        if (substr($c, strlen($c)-3, 3) == '零') {
+            $c = substr($c, 0, strlen($c)-3);
+        }
+        //将处理的汉字加上“整”
+        return $c;
+    }
 
 }

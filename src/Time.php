@@ -6,7 +6,7 @@
 
 namespace  metal\helper;
 
-class Time{
+final class Time{
 
 	/**
 	 * 返回今日开始和结束的时间戳
@@ -244,4 +244,66 @@ class Time{
 
 		return $rangeDatetime;
 	}
+
+	
+    /**
+	 * 程序开始时间
+     * @start time
+	 * @return string
+     */
+    public static function proStartTime()
+    {
+        global $startTime;
+        $mtime1    = explode(" ", microtime());
+        $startTime = $mtime1[1] + $mtime1[0];
+    }
+
+    /**
+	 * 程序结束时间
+     * @End time
+	 * @return string process time:
+     */
+    public static function proEndTime()
+    {
+        global $startTime, $set;
+        $mtime2    = explode(" ", microtime());
+        $endtime   = $mtime2[1] + $mtime2[0];
+        $totaltime = ($endtime - $startTime);
+        $totaltime = number_format($totaltime, 7);
+        return $totaltime;
+	}
+	
+	/**
+	 * 获取十三位时间戳
+	 * @param string $rangeDatetime
+	 * @return string 1501234567890
+	 */
+	public static function get13TimeStamp(){
+		list($t1,$t2)=
+		explode(' ',microtime());
+		return $t2.ceil($t1*1000);
+	}
+
+	
+/**从表查询的数组中，格式化输出时间
+ * @param $list
+ * @param string $field_name 字段
+ * @return array|string
+ * @time : 2018/6/11 15:01
+ */
+	public static function formatTime(&$list, $field_name = '')
+	{
+
+		if (is_array($list)) {
+			foreach ($list as $key => $value) {
+				if ($value[$field_name] == 0) {
+					$list[$key][$field_name] = intval(0);
+				} else {
+					$list[$key][$field_name] = date('Y-m-d H:i:s', $value[$field_name]);
+				}
+			}
+		}
+		return $list;
+	}
+
 }

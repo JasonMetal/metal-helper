@@ -7,7 +7,7 @@
 namespace metal\helper;
 use Exception;
 
-class Rsa
+final class Rsa
 {
     /**
      * 生成签名

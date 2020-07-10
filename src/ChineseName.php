@@ -119,17 +119,27 @@ final class ChineseName
     {
         return self::randomCnName('surname');
     }
-    public static function randomNameChars()
+    public static function randomNameChars($nameCharsLength)
     {
-        return self::randomCnName('nameChars');
+        return self::randomCnName('nameChars',$nameCharsLength);
     }
-    public static function randomCnName($fun){
+    public static function randomCnName($fun,$nameCharsLength){
         $arrTmp = self::$fun();
         $max = count($arrTmp) - 1;
-        return $arrTmp[mt_rand(0,$max)];
+        $result = $arrTmp[mt_rand(0,$max)];
+        //名字
+        if($nameCharsLength>0){
+            $result = '';
+            for ($i = 0; $i < $nameCharsLength; $i++) {
+                $result .= $arrTmp[rand(0, $max)];
+            }
+        }
+        return $result;
     }
-    public static function getRandomCnName(){
-        return  self::randomSurname() . self::randomNameChars();;
+    public static function getRandomCnName($nameCharsLength = 2,$delimiter = ''){
+        return  self::randomSurname() . $delimiter . self::randomNameChars($nameCharsLength);
     }
+
+     
 }
 

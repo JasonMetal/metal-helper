@@ -342,6 +342,115 @@ final class Arr{
         }
 
         return -1;
-    }
+	}
+	
+	/**
+	 * xml2array
+	 * @param $xml
+	 * @return bool|mixed
+	 */
+	public static function xml2arr($xml){
+		if(!$xml){
+			return false;
+		}
+		//将XML转为array
+		//禁止引用外部xml实体
+		libxml_disable_entity_loader(true);
+		$data = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
+		return $data;
+	}
+
+
+
+
+	
+  	/**
+     * @Notes  : 替换null "" 为空返回给前端
+     * @param $arr
+     * @return :array|string
+     */
+	public static function _unsetNull($arr){
+		
+			if ($arr !== null) {
+				if (is_array($arr)) {
+					if (!empty($arr)) {
+						foreach ($arr as $key => $value) {
+	//                        if ($value === '""') {
+							if ($value === null) {
+	
+								$arr[$key] = '';
+							} else {
+								$arr[$key] = self::_unsetNull($value);      //递归再去执行
+							}
+						}
+					} else {
+						$arr = '';
+					}
+				} else {
+					 if($arr === null){ $arr = ''; }         //注意三个等号
+				}
+			} else {
+				$arr = '';
+			}
+			return $arr;
+		}
+
+	
+	/**
+	 * 将字符串转换为数组
+	 *
+	 * @param	string	$data	字符串
+	 * @return	array	返回数组格式，如果，data为空，则返回空数组
+	 */
+	public static function string2array($data) {
+		if ($data == '')
+			return array();
+		@eval("\$array = $data;");
+		return $array;
+	}
+
+	/**
+	 * 将数组转换为字符串
+	 *
+	 * @param	array	$data		数组
+	 * @param	bool	$isformdata	如果为0，则不使用new_stripslashes处理，可选参数，默认为1
+	 * @return	string	返回字符串，如果，data为空，则返回空
+	 */
+	public static function array2string($data, $isformdata = 1) {
+		if ($data == '')
+			return '';
+		if ($isformdata)
+			$data = new_stripslashes($data);
+		return addslashes(var_export($data, TRUE));
+	}
+
+
+
+	/**数组转对象
+	 * @param $arr
+	 * @return object
+	 */
+	public static function arrayToObject($arr)
+	{
+		if (is_array($arr)) {
+			return (object)array_map(__FUNCTION__, $arr);
+		} else {
+			return $arr;
+		}
+	}
+
+	/**对象转数组
+	 * @param $object
+	 * @return array
+	 */
+	public static function object2array(&$object)
+	{
+		$object = json_decode(json_encode($object), true);
+		return $object;
+	}
+
+
+
+
 
 }

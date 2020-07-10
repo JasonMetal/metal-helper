@@ -123,7 +123,7 @@ final class ChineseName
     {
         return self::randomCnName('nameChars',$nameCharsLength);
     }
-    public static function randomCnName($fun,$nameCharsLength){
+    public static function randomCnName($fun,$nameCharsLength = 0){
         $arrTmp = self::$fun();
         $max = count($arrTmp) - 1;
         $result = $arrTmp[mt_rand(0,$max)];

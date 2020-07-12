@@ -449,6 +449,15 @@ final class Arr{
 		return $object;
 	}
 
+	/**判断是否标准json
+	 * @param $string
+	 * @return bool
+	 */
+	public static function is_json($string)
+    {
+        json_decode($string);
+        return (json_last_error() == JSON_ERROR_NONE);
+    }
 
 
 

@@ -14,16 +14,47 @@ final class Other
      */
     public static function get_client_ip()
     {
-        if ($_SERVER['REMOTE_ADDR']) {
-            $cip = $_SERVER['REMOTE_ADDR'];
-        } elseif (getenv("REMOTE_ADDR")) {
-            $cip = getenv("REMOTE_ADDR");
-        } elseif (getenv("HTTP_CLIENT_IP")) {
-            $cip = getenv("HTTP_CLIENT_IP");
-        } else {
-            $cip = "unknown";
+        $realip = null;
+        //判断服务器是否允许$_SERVER
+        if(isset($_SERVER)){
+            if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])){
+                $realip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            }elseif(isset($_SERVER['HTTP_CLIENT_IP'])) {
+                $realip = $_SERVER['HTTP_CLIENT_IP'];
+            }else{
+                $realip = $_SERVER['REMOTE_ADDR'];
+            }
+        }else{
+            //不允许就使用getenv获取
+            if(getenv("HTTP_X_FORWARDED_FOR")){
+                $realip = getenv( "HTTP_X_FORWARDED_FOR");
+            }elseif(getenv("HTTP_CLIENT_IP")) {
+                $realip = getenv("HTTP_CLIENT_IP");
+            }else{
+                $realip = getenv("REMOTE_ADDR");
+            }
         }
-        return $cip;
+        if ($realip && strpos($realip, ',')) {
+            $realip = explode(',', $realip)[0];
+        }
+        return $realip;
+    }
+
+    /**
+ * @Notes  : 获取客户端server ip 地址
+ * @return : 返回server ip地址 array|false|mixed|string
+ */
+    public static function getServerIp() {
+        if (isset($_SERVER)) {
+            if($_SERVER['SERVER_ADDR']) {
+                $server_ip = $_SERVER['SERVER_ADDR'];
+            } else {
+                $server_ip = $_SERVER['LOCAL_ADDR'];
+            }
+        } else {
+            $server_ip = getenv('SERVER_ADDR');
+        }
+        return $server_ip;
     }
 
     /**

@@ -87,7 +87,12 @@ final class Curl
      */
     public static function post($url, $data, $timeout = 5, $header = [])
     {
-        return self::request($url, 'POST', $data, $timeout, $header);
+         if (is_array($data)){
+            $postdata = http_build_query($data);
+        }else{
+            $postdata = '';
+        }
+        return self::request($url, 'POST', $postdata, $timeout, $header);
     }
 
     /**
@@ -96,10 +101,49 @@ final class Curl
     * @param $getData
     * @return false|string
     */
-    public static function fileGetHttpParams($url,$getData) {
+    public static function httpGet($url,$getData) {
        if (is_array($getData))
            $url = $url.'?'.http_build_query($getData);
-       $result = file_get_contents($url);
-       return $result;
+       $options = array(
+        'http' => array(
+            'method'  => 'GET',
+            'header'  => 'Content-type:application/x-www-form-urlencoded',
+            'timeout' => 3 // 超时时间（单位:s）
+            )
+        );
+        $context = stream_context_create($options);
+        $result  = file_get_contents($url, false, $context);
+        return $result;
    }
+
+   /**
+     * 发起https get请求
+     */
+    public static function _httpsGet($url,$getData){
+        if (is_array($getData))
+            $url = $url.'?'.http_build_query($getData);
+        return self::request($url, 'GET', [], '', []);
+    }
+
+    /**
+     * 设置好请求头的post x-www-form-urlencoded 以文件形式获取参数
+     * @param $url
+     * @param $post_data
+     * @return false|string
+     */
+    public static function httpPost($url,$post_data) {
+        $postdata = http_build_query($post_data);
+        $options = array(
+            'http' => array(
+                'method' => 'POST',
+                'header' => 'Content-type:application/x-www-form-urlencoded',
+                'content' => $postdata,
+                'timeout' => 3 // 超时时间（单位:s）
+            )
+        );
+        $context = stream_context_create($options);
+        $result = file_get_contents($url, false, $context);
+
+        return $result;
+    }
 }

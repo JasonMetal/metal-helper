@@ -61,14 +61,14 @@ final class Curl
      * get
      *
      * @param string $url 请求URL
-     * @param int $timeout 超时时间
+     * @param int $timeout 超时时间 3s（单位:s）
      * @param array $header Header头
-     *
+     * @param array $timeout Header头
      * @return mixed
      * 
      *
      */
-    public static function get($url, $timeout, $header = [])
+    public static function get($url, $timeout = 3, $header = [])
     {
         return self::request($url, 'GET', [], $timeout, $header);
     }

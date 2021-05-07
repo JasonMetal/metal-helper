@@ -451,6 +451,24 @@ final class Arr{
 		return $object;
 	}
 
+    /**
+     * Gets the properties of the given object recursion
+     *
+     * @access private
+     *
+     * @return array
+     */
+    public static function object_to_array($obj)
+    {
+        $_arr = is_object($obj) ? get_object_vars($obj) : $obj;
+        $arr = [];
+        foreach ($_arr as $key => $val) {
+            $val       = (is_array($val) || is_object($val)) ? self::object_to_array($val) : $val;
+            $arr[$key] = $val;
+        }
+        return $arr;
+    }
+
 	/**判断是否标准json
 	 * @param $string
 	 * @return bool
@@ -462,6 +480,41 @@ final class Arr{
     }
 
 
+    /**
+     * 将对象成员变量或者数组的特殊字符进行转义
+     * @access   public
+     * @param    mix        $obj      对象或者数组
+     * @author   Xuan Yan
+     * @return   mix                  对象或者数组
+     */
+    public static function addslashes_deep_obj2($obj)
+    {
+        if (is_object($obj) == true) {
+            foreach ($obj AS $key => $val) {
+                $obj->$key = self::addslashes_deep2($val);
+            }
+        } else {
+            $obj = self::addslashes_deep2($obj);
+        }
+        return $obj;
+    }
 
 
+    /**
+     * 递归方式的对变量中的特殊字符进行转义
+     * @access  public
+     * @param   mix     $value
+     * @return  mix
+     */
+    public static function addslashes_deep2($value)
+    {
+        if (empty($value))
+        {
+            return $value;
+        }
+        else
+        {
+            return is_array($value) ? array_map('self::addslashes_deep2', $value) : addslashes($value);
+        }
+    }
 }

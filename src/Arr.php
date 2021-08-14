@@ -517,4 +517,46 @@ final class Arr{
             return is_array($value) ? array_map('self::addslashes_deep2', $value) : addslashes($value);
         }
     }
+
+        /**
+     * @Notes  : formData2Json 模块
+     * ->@Notes  : 获取 xx
+     * @param Request $request
+     * @exp  :
+     * $formData = 'version:1000001
+                        language:en
+                        platform:ios
+                        sysLanguage:zh-Hant-US
+                        channelLanguage:en
+                        deviceId:DB08A85D-52AA-4682-B3FD-1143ACCBE6A6
+                        mode:aud
+                        packageName:com.starrylovegame.xtlq.guanfang.ios
+                        lastTimeGameId:100
+                        equipmentInfo:ios';
+     * @return :\think\response\Json
+     * @time   : 2021/8/14_10:04
+     */
+    public static function  formData2Json(){
+//        $formData = $request->param('formData');
+        $formData = 'version:1000001
+                        language:en
+                        platform:ios
+                        sysLanguage:zh-Hant-US
+                        channelLanguage:en
+                        deviceId:DB08A85D-52AA-4682-B3FD-1143ACCBE6A6
+                        mode:aud
+                        packageName:com.starrylovegame.xtlq.guanfang.ios
+                        lastTimeGameId:100
+                        equipmentInfo:ios';
+        $tmp = $log = [];
+        $list = explode(PHP_EOL, $formData);
+        foreach ($list as $k=> $v){
+            if (empty($v)) continue;
+            $v = trim($v);
+            $tmp[] = explode(':', $v);
+            $log[$tmp[$k][0]] = $tmp[$k][1];
+        }
+        return json_encode($log,256);
+    }
+
 }

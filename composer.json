@@ -2,7 +2,7 @@
 	"name":"metal/helper",
 	"description":"PHP项目常用助手函数，涵盖了Array,String,Time,Server,File,Number,Image,Byte,Other(ext)等，修复一些函数，新增图片处理函数，新增字节处理函数，新增处理中文文字的函数",
 	"type":"library",
-	"version":"1.1.6.4",
+	"version":"1.1.6.5",
 	"authors":[
 		{
 			"name":"metal",

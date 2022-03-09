@@ -315,6 +315,68 @@ final class Other
         return $content;
     }
 
+    /**
+     * 创建(导出)Excel数据表格
+     * @param array $list 要导出的数组格式的数据
+     * @param string $filename 导出的Excel表格数据表的文件名
+     * @param array $indexKey $list数组中与Excel表格表头$header中每个项目对应的字段的名字(key值)
+     * @param array $startRow 第一条数据在Excel表格中起始行
+     * @param  [bool]  $excel2007   是否生成Excel2007(.xlsx)以上兼容的数据表
+     *      $filename = '配置数据'.date('Y-m-d_H点i分');
+            $field = [
+                'name'=>'名称',
+                'menu_name'=>'目录',//...
+                ];
+            $indexkey = array_keys($field);
+            $list = array_merge([$field],$list);
+            export_excel($list,$filename,$indexkey);
+     * 比如: $indexKey与$list数组对应关系如下:
+     *     $indexKey = array('id','username','sex','age');
+     *     $list = array(array('id'=>1,'username'=>'YQJ','sex'=>'男','age'=>24));
+     */
+    public static function export_excel($list, $filename, $indexKey, $startRow = 1, $excel2007 = false) {
+        require(Env::get('root_path') . '/vendor/phpexcel/PHPExcel.php');
+        //文件引入
+        if (empty($filename)) $filename = time();
+        if (!is_array($indexKey)) return false;
+
+        $header_arr = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
+        //初始化PHPExcel()
+        $objPHPExcel = new PHPExcel();
+
+        //设置保存版本格式
+        if ($excel2007) {
+            $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+            $filename = $filename . '.xlsx';
+        } else {
+            $objWriter = new PHPExcel_Writer_Excel5($objPHPExcel);
+            $filename = $filename . '.xls';
+        }
+
+        //接下来就是写数据到表格里面去
+        $objActSheet = $objPHPExcel->getActiveSheet();
+        //$startRow = 1;
+        foreach ($list as $row) {
+            foreach ($indexKey as $key => $value) {
+                //这里是设置单元格的内容
+                $objActSheet->setCellValue($header_arr[$key] . $startRow, $row[$value]);
+            }
+            $startRow++;
+        }
+
+        // 下载这个表格，在浏览器输出
+        header("Pragma: public");
+        header("Expires: 0");
+        header("Cache-Control:must-revalidate, post-check=0, pre-check=0");
+        header("Content-Type:application/force-download");
+        header("Content-Type:application/vnd.ms-execl");
+        header("Content-Type:application/octet-stream");
+        header("Content-Type:application/download");;
+        header('Content-Disposition:attachment;filename=' . $filename . '');
+        header("Content-Transfer-Encoding:binary");
+        $objWriter->save('php://output');
+    }
+
 }
   
 

@@ -197,4 +197,36 @@ final class File{
 		exit;
 	}
 
+    /**
+     * @Notes  : 扫描文件夹获取目录
+     * ->@Notes  : 获取 xx
+     * @param  :
+     * @return :array
+     * @user   : user
+     * @time   : 2022/3/9_14:54
+     */
+	public static function scandirs($dir='./Uploads/'){
+        $tmp = [];
+        $data = scandir($dir);
+        foreach ($data as $value) {
+            if ('.' != $value && '..' != $value) {
+                $tmp[] = $value;
+            }
+        }
+        return $tmp;
+    }
+
+    public static function scanfiles($path='./Uploads/ipcai/',$dir=''){
+        //打开当前文件夹由 $path 指定
+        $handler = opendir($path);
+        $jt = [];
+        while (($filename = readdir($handler)) !== false) {//略过linux目录的名字为'.'和‘..'的文件
+            if ($filename != '.' && $filename != '..' && $filename != 'Thumbs.db') {//输出文件名
+                $jt[] = $filename;
+            }
+        }
+        closedir($handler);
+        return $jt;
+    }
+
 }

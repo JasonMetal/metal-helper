@@ -581,6 +581,33 @@ final class Arr {
         }
         return array_key_exists($key, $array);
     }
+
+    /**
+     * @Notes  : 大数组 找元素，效率低的时候
+     * ->@Notes  : in_array is too slow when array is large
+     * @param $item
+     * @param $array
+     * @param int $type
+     * @param  :
+     * @return :bool
+     * @user   : user
+     * @time   : 2022/3/9_15:51
+     */
+    public static function inArray($item, $array, $type = 1) {
+        if (1 == $type) {
+            //反转数组中的键名和对应关联的键值
+            $flipArray = array_flip($array);
+            return isset($flipArray[$item]);
+        } else {
+            //用implode连接，直接用strpos判断
+            $item = ',' . $item . ',';
+            $str  = implode(',', $array);
+            $str  = ',' . $str . ',';
+            //$mystring, $findme
+            return false !== strpos($str, $item);
+        }
+    }
+
 }
 
 

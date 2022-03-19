@@ -984,4 +984,22 @@ final class Str
         return $c;
     }
 
+    /**
+     * @Notes  : 过滤所有中英文标点符号
+     * ->@Notes  :
+     * @param  : 中文字符：。 ？ ！ ， 、 ； ： “ ” ‘ ’ （ ） 《 》 〈 〉 【 】 『 』 「 」 ﹃ ﹄ 〔 〕 … — ～ ﹏ ￥
+     * @param  : 英文字符：, / < > ? ; : " ’ | [ ] { } ` ~ ! # @ $ % ^ & * ( )
+     * @user   : user
+     * @time   : 2022/3/19/019_11:30
+     */
+    public static function filter_punctuation_marks($str){
+        if (empty($str)) {
+            return '';
+        }
+        $str = urlencode($str);//把需要过滤的字符串进行urlencode编码
+        $str = preg_replace("/(%E3%80%82|%EF%BC%9F|%EF%BC%81|%EF%BC%8C|%E3%80%81|%EF%BC%9B|%EF%BC%9A|%E2%80%9C|%E2%80%9D|%E2%80%98|%E2%80%99|%EF%BC%88|%EF%BC%89|%E3%80%8A|%E3%80%8B|%E3%80%88|%E3%80%89|%E3%80%90|%E3%80%91|%E3%80%8E|%E3%80%8F|%E3%80%8C|%E3%80%8D|%EF%B9%83|%EF%B9%84|%E3%80%94|%E3%80%95|%E2%80%A6|%E2%80%94|%EF%BD%9E|%EF%B9%8F|%EF%BF%A5|%2C|%2F|%3C|%3E|%3F|%3B|%3A|%22|%27|%7C|%5B|%5D|%7B|%7D|%60|%7E|%21|%23|%40|%24|%25|%5E|%26|%2A|%28|%29|%5C)+/",'',$str);//使用preg_replace进行正则替换
+        //将替换后的字符串使用urldecode进行解码
+        return urldecode($str);
+    }
+
 }

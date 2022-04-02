@@ -813,8 +813,7 @@ final class Str
         $char1           = substr($mobilephone, 0, 3);
         $char2           = substr($mobilephone, 4, 4);
         $char3           = substr($mobilephone, -4);
-        $new_mobilephone = $char1 . ' ' . $char2 . ' ' . $char3;
-        return $new_mobilephone;
+        return $char1 . ' ' . $char2 . ' ' . $char3;
     }
 
 
@@ -1002,4 +1001,23 @@ final class Str
         return urldecode($str);
     }
 
+    /**
+     * 处理银行卡号
+     * @param $str
+     * @param $type 1-正则，2-函数，3-星号
+     * @return string
+     */
+    public static function formart_bank_account($str, $type = 1) {
+        if (!$str) return $str;
+        if (1 == $type) {
+            //通过正则，每四位截取到数组中
+            preg_match('/([\d]{4})([\d]{4})([\d]{4})([\d]{4})([\d]{0,})?/', $str, $match);
+            unset($match[0]);
+            return implode(' ', $match);
+        } elseif (2 == $type) {
+            return implode(' ', str_split($str, 4));
+        } else {
+            return "**** **** **** " . substr($str, strlen($str) - 4);
+        }
+    }
 }

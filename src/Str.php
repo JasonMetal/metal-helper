@@ -798,7 +798,25 @@ final class Str
     public static function is_mobilephone($mobilephone)
     {
         return
-            strlen($mobilephone) > 9 && preg_match("/^(((13[0-9]{1})|(14[0-9]{1})|(15[0-9]{1})|(17[0-9]{1})|(18[0-9]{1}))+\d{8})$/", $mobilephone);
+            strlen($mobilephone) > 9 && preg_match("/^(((13[0-9]{1})|(14[0-9]{1})|(15[0-9]{1})|(17[0-9]{1})|(18[0-9]{1})|(19[0-9]{1}))+\d{8})$/", $mobilephone);
+    }
+
+    /**
+     * @Notes  : 判断手机号码格式是否正确（86 中国的国际区号）
+     * ->@Notes  : 未来可能会有的 不考虑第二位
+     * $match = '/^((\+?86)|(\+86)|0)?(1\d{10})$/';
+     * ->@Notes  : 考虑第二位是6
+     * $match = '/^((\+?86)|(\+86)|0)?(1[345789]\d{9})$/';
+     * ->@Notes  : 获取 xx
+     * @param $mobilephone
+     * @param  :
+     * @return :bool
+     */
+    public static function is_mobile($mobilephone) {
+        $mobilephone = trim($mobilephone);
+        if (empty ($mobilephone)) return false;
+        $match = '/^((\+?86)|(\+86)|0)?(1[345789]\d{9})$/';
+        return preg_match($match, $mobilephone) !== 0;
     }
 
     /**

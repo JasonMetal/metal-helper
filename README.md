@@ -8,11 +8,10 @@ PHP项目常用助手函数，涵盖了Array,String,Time,Server,File,Number,Imag
 #引入包
 use metal\helper;
  
- public function index()
-{
+ public function index() {
 
       $cnName = helper\ChineseName::getRandomCnName(2,'-');
-        var_dump($cnName); // 费-欣澜
+      var_dump($cnName); // 费-欣澜
 
 }
 

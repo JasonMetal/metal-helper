@@ -7,8 +7,7 @@
 
 namespace metal\helper;
 
-final class Curl
-{
+final class Curl {
     /**
      * request
      *
@@ -19,11 +18,10 @@ final class Curl
      * @param array $header Header头
      *
      * @return mixed
-     * 
+     *
      *
      */
-    public static function request($url, $method, $data = null, $timeout = 5, $header = [])
-    {
+    public static function request($url, $method, $data = null, $timeout = 5, $header = []) {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
 
@@ -67,8 +65,7 @@ final class Curl
      * @return :array|bool|string
      * @time   : 2021/5/23/023_23:53
      */
-    static function http($url, $method = "GET", $data = NULL, $https = false)
-    {
+    static function http($url, $method = "GET", $data = NULL, $https = false) {
         $curl = curl_init(); // 启动一个CURL会话
         curl_setopt($curl, CURLOPT_URL, $url); // 要访问的地址
         if ($https) {
@@ -83,7 +80,7 @@ final class Curl
                     curl_setopt(
                         $curl,
                         CURLOPT_HTTPHEADER,
-                        array('Content-Type: application/json; charset=utf-8', 'Content-Length:' . strlen($data))
+                        ['Content-Type: application/json; charset=utf-8', 'Content-Length:' . strlen($data)]
                     );
                 }
                 if ($method == 'PUT' || strtoupper($method) == 'DELETE') {
@@ -96,7 +93,7 @@ final class Curl
         $res     = curl_exec($curl); // 执行操作
         $errorno = curl_errno($curl);
         if ($errorno) {
-            return array('errorno' => false, 'errmsg' => $errorno);
+            return ['errorno' => false, 'errmsg' => $errorno];
         }
         curl_close($curl); // 关闭CURL会话
         //  return json_decode($res, true);
@@ -104,10 +101,7 @@ final class Curl
     }
 
 
-
-
-    static function httpCurl($url, $data = '', $method = 'GET', $https = false, $header = [], $timeout = 3)
-    {
+    static function httpCurl($url, $data = '', $method = 'GET', $https = false, $header = [], $timeout = 3) {
         $curl = curl_init(); // 启动一个CURL会话
         curl_setopt($curl, CURLOPT_URL, $url); // 要访问的地址
         if ($https) {
@@ -149,8 +143,7 @@ final class Curl
      * @param array $header
      * @return bool|string
      */
-    static function sendHttpByCurl($url, $data = '', $method = 'GET', $header = array())
-    {
+    static function sendHttpByCurl($url, $data = '', $method = 'GET', $header = []) {
         $curl = curl_init(); // 启动一个CURL会话
         curl_setopt($curl, CURLOPT_URL, $url); // 要访问的地址
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false); // 对认证证书来源的检查
@@ -190,11 +183,10 @@ final class Curl
      * @param array $header Header头
      * @param array $timeout Header头
      * @return mixed
-     * 
+     *
      *
      */
-    public static function get($url, $timeout = 3, $header = [])
-    {
+    public static function get($url, $timeout = 3, $header = []) {
         return self::request($url, 'GET', [], $timeout, $header);
     }
 
@@ -207,11 +199,10 @@ final class Curl
      * @param array $header Header头
      *
      * @return mixed
-     * 
+     *
      *
      */
-    public static function post($url, $data, $timeout = 5, $header = [])
-    {
+    public static function post($url, $data, $timeout = 5, $header = []) {
         if (is_array($data)) {
             $postdata = http_build_query($data);
         } else {
@@ -221,14 +212,13 @@ final class Curl
     }
 
 
-    static function httpsCurlJson($url, $data, $timeout, $header = [])
-    {
+    static function httpsCurlJson($url, $data, $timeout, $header = []) {
 
         $header1  = [
             "Content-type: application/json;charset='utf-8'",
             "Accept: application/json",
             "Cache-Control: no-cache",
-            "Pragma: no-cache"
+            "Pragma: no-cache",
         ];
         $header   = array_merge($header1, $header);
         $jsonData = json_encode($data);
@@ -241,17 +231,16 @@ final class Curl
      * @param $getData
      * @return false|string
      */
-    public static function httpGet($url, $getData)
-    {
+    public static function httpGet($url, $getData) {
         if (is_array($getData))
             $url = $url . '?' . http_build_query($getData);
-        $options = array(
-            'http' => array(
+        $options = [
+            'http' => [
                 'method'  => 'GET',
                 'header'  => 'Content-type:application/x-www-form-urlencoded',
                 'timeout' => 3 // 超时时间（单位:s）
-            )
-        );
+            ],
+        ];
         $context = stream_context_create($options);
         $result  = file_get_contents($url, false, $context);
         return $result;
@@ -260,8 +249,7 @@ final class Curl
     /**
      * 发起https get请求
      */
-    public static function _httpsGet($url, $getData)
-    {
+    public static function _httpsGet($url, $getData) {
         if (is_array($getData))
             $url = $url . '?' . http_build_query($getData);
         return self::request($url, 'GET', [], '', []);
@@ -273,19 +261,18 @@ final class Curl
      * @param $post_data
      * @return false|string
      */
-    public static function httpPost($url, $post_data)
-    {
+    public static function httpPost($url, $post_data) {
         $postdata = http_build_query($post_data);
-        $options = array(
-            'http' => array(
-                'method' => 'POST',
-                'header' => 'Content-type:application/x-www-form-urlencoded',
+        $options  = [
+            'http' => [
+                'method'  => 'POST',
+                'header'  => 'Content-type:application/x-www-form-urlencoded',
                 'content' => $postdata,
                 'timeout' => 3 // 超时时间（单位:s）
-            )
-        );
-        $context = stream_context_create($options);
-        $result = file_get_contents($url, false, $context);
+            ],
+        ];
+        $context  = stream_context_create($options);
+        $result   = file_get_contents($url, false, $context);
 
         return $result;
     }

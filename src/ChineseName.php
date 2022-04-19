@@ -11,8 +11,7 @@ namespace metal\helper;
  *
  * @package  metal\helper
  */
-final class ChineseName
-{
+final class ChineseName {
     /**
      * @Notes  : 助手 模块
      * ->@Notes  : 获取 姓氏 Surname
@@ -21,8 +20,7 @@ final class ChineseName
      * @user   : XiaoMing
      * @time   : 2020/7/9_11:09
      */
-    public static function surname()
-    {
+    public static function surname() {
 
         return [
 
@@ -89,8 +87,7 @@ final class ChineseName
      * @user   : XiaoMing
      * @time   : 2020/7/9_11:10
      */
-    public static function nameChars()
-    {
+    public static function nameChars() {
         return [
             '嘉', '琼', '桂', '娣', '叶', '璧', '璐', '娅', '琦', '晶', '妍', '茜', '秋', '珊', '莎',
             '锦', '黛', '青', '倩', '婷', '姣', '婉', '娴', '瑾', '颖', '露', '瑶', '怡', '婵', '雁',
@@ -115,20 +112,20 @@ final class ChineseName
         ];
     }
 
-    public static function randomSurname()
-    {
+    public static function randomSurname() {
         return self::randomCnName('surname');
     }
-    public static function randomNameChars($nameCharsLength)
-    {
-        return self::randomCnName('nameChars',$nameCharsLength);
+
+    public static function randomNameChars($nameCharsLength) {
+        return self::randomCnName('nameChars', $nameCharsLength);
     }
-    public static function randomCnName($fun,$nameCharsLength = 0){
+
+    public static function randomCnName($fun, $nameCharsLength = 0) {
         $arrTmp = self::$fun();
-        $max = count($arrTmp) - 1;
-        $result = $arrTmp[mt_rand(0,$max)];
+        $max    = count($arrTmp) - 1;
+        $result = $arrTmp[mt_rand(0, $max)];
         //名字
-        if($nameCharsLength>0){
+        if ($nameCharsLength > 0) {
             $result = '';
             for ($i = 0; $i < $nameCharsLength; $i++) {
                 $result .= $arrTmp[rand(0, $max)];
@@ -136,10 +133,11 @@ final class ChineseName
         }
         return $result;
     }
-    public static function getRandomCnName($nameCharsLength = 2,$delimiter = ''){
-        return  self::randomSurname() . $delimiter . self::randomNameChars($nameCharsLength);
+
+    public static function getRandomCnName($nameCharsLength = 2, $delimiter = '') {
+        return self::randomSurname() . $delimiter . self::randomNameChars($nameCharsLength);
     }
 
-     
+
 }
 

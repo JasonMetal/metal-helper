@@ -6,31 +6,29 @@
 
 namespace metal\helper;
 
-final class Other
-{
+final class Other {
     /**
      *获取客户端ip地址
      * @return 返回IP地址
      */
-    public static function get_client_ip()
-    {
+    public static function get_client_ip() {
         $realip = null;
         //判断服务器是否允许$_SERVER
-        if(isset($_SERVER)){
-            if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])){
+        if (isset($_SERVER)) {
+            if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
                 $realip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-            }elseif(isset($_SERVER['HTTP_CLIENT_IP'])) {
+            } elseif (isset($_SERVER['HTTP_CLIENT_IP'])) {
                 $realip = $_SERVER['HTTP_CLIENT_IP'];
-            }else{
+            } else {
                 $realip = $_SERVER['REMOTE_ADDR'];
             }
-        }else{
+        } else {
             //不允许就使用getenv获取
-            if(getenv("HTTP_X_FORWARDED_FOR")){
-                $realip = getenv( "HTTP_X_FORWARDED_FOR");
-            }elseif(getenv("HTTP_CLIENT_IP")) {
+            if (getenv("HTTP_X_FORWARDED_FOR")) {
+                $realip = getenv("HTTP_X_FORWARDED_FOR");
+            } elseif (getenv("HTTP_CLIENT_IP")) {
                 $realip = getenv("HTTP_CLIENT_IP");
-            }else{
+            } else {
                 $realip = getenv("REMOTE_ADDR");
             }
         }
@@ -41,12 +39,12 @@ final class Other
     }
 
     /**
- * @Notes  : 获取客户端server ip 地址
- * @return : 返回server ip地址 array|false|mixed|string
- */
+     * @Notes  : 获取客户端server ip 地址
+     * @return : 返回server ip地址 array|false|mixed|string
+     */
     public static function getServerIp() {
         if (isset($_SERVER)) {
-            if($_SERVER['SERVER_ADDR']) {
+            if ($_SERVER['SERVER_ADDR']) {
                 $server_ip = $_SERVER['SERVER_ADDR'];
             } else {
                 $server_ip = $_SERVER['LOCAL_ADDR'];
@@ -61,8 +59,7 @@ final class Other
      * 获取客户端IP地址[已集成 CDN获取底层用户IP]
      * @return 返回IP地址
      */
-    public static function i2c_realip()
-    {
+    public static function i2c_realip() {
         $ip = FALSE;
         if ($_SERVER["HTTP_CDN_SRC_IP"]) {
             return $_SERVER["HTTP_CDN_SRC_IP"];
@@ -108,8 +105,7 @@ final class Other
 
 
 // 获取客户端IP地址
-    public static function getIp()
-    {
+    public static function getIp() {
         if (!empty($_SERVER["HTTP_CLIENT_IP"]) && strcasecmp($_SERVER["HTTP_CLIENT_IP"], "unknown")) {
             $ip = $_SERVER["HTTP_CLIENT_IP"];
         } else {
@@ -138,8 +134,7 @@ final class Other
      * @param $string 需要处理的字符串或数组
      * @return mixed
      */
-    public static function new_stripslashes($string)
-    {
+    public static function new_stripslashes($string) {
         if (!is_array($string))
             return stripslashes($string);
         foreach ($string as $key => $val)
@@ -152,8 +147,7 @@ final class Other
      * @param $obj 需要处理的字符串或数组
      * @return mixed
      */
-    public static function new_html_special_chars($string)
-    {
+    public static function new_html_special_chars($string) {
         $encoding = 'utf-8';
         if (strtolower(CHARSET) == 'gbk')
             $encoding = 'gb2312';
@@ -164,8 +158,7 @@ final class Other
         return $string;
     }
 
-    public static function new_html_entity_decode($string)
-    {
+    public static function new_html_entity_decode($string) {
         $encoding = 'utf-8';
         if (strtolower(CHARSET) == 'gbk')
             $encoding = 'gb2312';
@@ -178,8 +171,7 @@ final class Other
      * @param $string
      * @return string
      */
-    public static function safe_replace($string)
-    {
+    public static function safe_replace($string) {
         $string = str_replace('%20', '', $string);
         $string = str_replace('%27', '', $string);
         $string = str_replace('%2527', '', $string);
@@ -202,8 +194,7 @@ final class Other
      * @param $string
      * @return string
      */
-    public static function remove_xss($string)
-    {
+    public static function remove_xss($string) {
         $string = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]+/S', '', $string);
         $parm1  = ['javascript', 'vbscript', 'expression', 'applet', 'meta', 'xml', 'blink', 'link', 'script', 'embed', 'object', 'iframe', 'frame', 'frameset', 'ilayer', 'layer', 'bgsound', 'title', 'base'];
         $parm2  = [
@@ -231,8 +222,7 @@ final class Other
      * 过滤ASCII码从0-28的控制字符
      * @return String
      */
-    public static function trim_unsafe_control_chars($str)
-    {
+    public static function trim_unsafe_control_chars($str) {
         $rule = '/[' . chr(1) . '-' . chr(8) . chr(11) . '-' . chr(12) . chr(14) . '-' . chr(31) . ']*/';
         return str_replace(chr(0), '', preg_replace($rule, '', $str));
     }
@@ -243,8 +233,7 @@ final class Other
      * @param $string 文本域内容
      * @return string
      */
-    public static function trim_textarea($string)
-    {
+    public static function trim_textarea($string) {
         $string = nl2br(str_replace(' ', '&nbsp;', $string));
         return $string;
     }
@@ -255,8 +244,7 @@ final class Other
      * @param intval $isjs 是否执行字符串格式化，默认为执行
      * @return string 处理后的字符串
      */
-    public static function format_js($string, $isjs = 1)
-    {
+    public static function format_js($string, $isjs = 1) {
         $string = addslashes(str_replace(["\r", "\n", "\t"], ['', '', ''], $string));
         return $isjs ? 'document.write("' . $string . '");' : $string;
     }
@@ -267,8 +255,7 @@ final class Other
      * @param $str
      * @return mixed
      */
-    public static function trim_script($str)
-    {
+    public static function trim_script($str) {
         if (is_array($str)) {
             foreach ($str as $key => $val) {
                 $str[$key] = trim_script($val);
@@ -285,8 +272,7 @@ final class Other
     /**
      * 获取当前页面完整URL地址
      */
-    public static function get_url()
-    {
+    public static function get_url() {
         $sys_protocal = isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == '443' ? 'https://' : 'http://';
         $php_self     = $_SERVER['PHP_SELF'] ? safe_replace($_SERVER['PHP_SELF']) : safe_replace($_SERVER['SCRIPT_NAME']);
         $path_info    = isset($_SERVER['PATH_INFO']) ? safe_replace($_SERVER['PATH_INFO']) : '';
@@ -295,10 +281,10 @@ final class Other
     }
 
     /**
-     * 过滤a标签中某些特定域名外的链接 
-     * 
-     * @param string $content 
-     * @return string 
+     * 过滤a标签中某些特定域名外的链接
+     *
+     * @param string $content
+     * @return string
      */
     public static function strip_html_a($content) {
         $pre = "/<a (.*?)>(.*?)<\/a>/i";
@@ -323,13 +309,13 @@ final class Other
      * @param array $startRow 第一条数据在Excel表格中起始行
      * @param  [bool]  $excel2007   是否生成Excel2007(.xlsx)以上兼容的数据表
      *      $filename = '配置数据'.date('Y-m-d_H点i分');
-            $field = [
-                'name'=>'名称',
-                'menu_name'=>'目录',//...
-                ];
-            $indexkey = array_keys($field);
-            $list = array_merge([$field],$list);
-            export_excel($list,$filename,$indexkey);
+     * $field = [
+     * 'name'=>'名称',
+     * 'menu_name'=>'目录',//...
+     * ];
+     * $indexkey = array_keys($field);
+     * $list = array_merge([$field],$list);
+     * export_excel($list,$filename,$indexkey);
      * 比如: $indexKey与$list数组对应关系如下:
      *     $indexKey = array('id','username','sex','age');
      *     $list = array(array('id'=>1,'username'=>'YQJ','sex'=>'男','age'=>24));
@@ -340,17 +326,17 @@ final class Other
         if (empty($filename)) $filename = time();
         if (!is_array($indexKey)) return false;
 
-        $header_arr = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
+        $header_arr = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
         //初始化PHPExcel()
         $objPHPExcel = new PHPExcel();
 
         //设置保存版本格式
         if ($excel2007) {
             $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
-            $filename = $filename . '.xlsx';
+            $filename  = $filename . '.xlsx';
         } else {
             $objWriter = new PHPExcel_Writer_Excel5($objPHPExcel);
-            $filename = $filename . '.xls';
+            $filename  = $filename . '.xls';
         }
 
         //接下来就是写数据到表格里面去

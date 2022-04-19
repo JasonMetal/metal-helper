@@ -5,10 +5,10 @@
  */
 
 namespace metal\helper;
+
 use Exception;
 
-final class Aes
-{
+final class Aes {
     /**
      * var string $method 加解密方法，可通过openssl_get_cipher_methods()获得
      */
@@ -40,8 +40,7 @@ final class Aes
      *
      * @throws Exception
      */
-    public function __construct($key, $method = 'aes-256-ecb', $iv = '', $options = 0)
-    {
+    public function __construct($key, $method = 'aes-256-ecb', $iv = '', $options = 0) {
         if (empty($key)) {
             throw new Exception('加解密的密钥不能为空');
         }
@@ -65,8 +64,7 @@ final class Aes
      * @return string
      * @author King
      */
-    public function encrypt($data)
-    {
+    public function encrypt($data) {
         return openssl_encrypt($data, $this->method, $this->key, $this->options, $this->iv);
     }
 
@@ -78,8 +76,7 @@ final class Aes
      * @return string
      * @author King
      */
-    public function decrypt($data)
-    {
+    public function decrypt($data) {
         return openssl_decrypt($data, $this->method, $this->key, $this->options, $this->iv);
     }
 

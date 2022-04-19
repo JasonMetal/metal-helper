@@ -5,8 +5,7 @@
 
 namespace metal\helper;
 
-final class Byte
-{
+final class Byte {
 
     /**
      * 转换字节数为其他单位
@@ -15,8 +14,7 @@ final class Byte
      * @param string $filesize 字节大小
      * @return    string    返回大小
      */
-    public static function sizecount($filesize)
-    {
+    public static function sizecount($filesize) {
         if ($filesize >= 1073741824) {
             $filesize = round($filesize / 1073741824 * 100) / 100 . ' GB';
         } elseif ($filesize >= 1048576) {

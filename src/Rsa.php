@@ -5,10 +5,10 @@
  */
 
 namespace metal\helper;
+
 use Exception;
 
-final class Rsa
-{
+final class Rsa {
     /**
      * 生成签名
      * generateSignature
@@ -20,8 +20,7 @@ final class Rsa
      * @return string
      * @throws Exception
      */
-    public static function generateSignature($data, $private_key)
-    {
+    public static function generateSignature($data, $private_key) {
         $private_key_resource = openssl_pkey_get_private($private_key);
         if (!$private_key_resource) {
             throw new Exception('私钥格式错误');
@@ -46,8 +45,7 @@ final class Rsa
      * @return bool
      * @throws Exception
      */
-    public static function verifySignature($data, $signature, $public_key)
-    {
+    public static function verifySignature($data, $signature, $public_key) {
         $public_key_resource = openssl_pkey_get_public($public_key);
         if (!$public_key_resource) {
             throw new Exception('公钥格式错误');
@@ -71,8 +69,7 @@ final class Rsa
      * @return string
      * @throws Exception
      */
-    public static function privateKeyEncrypt($data, $private_key)
-    {
+    public static function privateKeyEncrypt($data, $private_key) {
         $private_key_resource = openssl_pkey_get_private($private_key);
         if (!$private_key_resource) {
             throw new Exception('私钥格式错误');
@@ -96,8 +93,7 @@ final class Rsa
      * @author King
      *
      */
-    public static function privateKeyDecrypt($data, $private_key)
-    {
+    public static function privateKeyDecrypt($data, $private_key) {
         $private_key_resource = openssl_pkey_get_private($private_key);
         if (!$private_key_resource) {
             throw new Exception('私钥格式错误');
@@ -120,8 +116,7 @@ final class Rsa
      * @throws Exception
      * @author King
      */
-    public static function publicKeyEncrypt($data, $public_key)
-    {
+    public static function publicKeyEncrypt($data, $public_key) {
         $public_key_resource = openssl_pkey_get_public($public_key);
         if (!$public_key_resource) {
             throw new Exception('公钥格式错误');
@@ -145,8 +140,7 @@ final class Rsa
      * @return string
      * @throws Exception
      */
-    public static function publicKeyDecrypt($data, $public_key)
-    {
+    public static function publicKeyDecrypt($data, $public_key) {
         $public_key_resource = openssl_pkey_get_public($public_key);
         if (!$public_key_resource) {
             throw new Exception('公钥格式错误');

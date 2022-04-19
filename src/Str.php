@@ -11,23 +11,21 @@ namespace metal\helper;
  *
  * @package  metal\helper
  */
-final class Str
-{
+final class Str {
 
 
-     /**
+    /**
      * 获取变量名
      * 例如 get_variable_name($a, get_defined_vars())
      * @var string
      */
-    protected static function get_variable_name(&$var, $scope = null)
-    {
+    protected static function get_variable_name(&$var, $scope = null) {
 
         $scope = $scope == null ? $GLOBALS : $scope; // 如果没有范围则在globals中找寻
-        $tmp = $var;
-        $var  = 'tmp_value_' . mt_rand();
-        $name = array_search($var, $scope, true); // 根据值查找变量名称
-        $var = $tmp;
+        $tmp   = $var;
+        $var   = 'tmp_value_' . mt_rand();
+        $name  = array_search($var, $scope, true); // 根据值查找变量名称
+        $var   = $tmp;
         return $name;
     }
 
@@ -60,8 +58,7 @@ final class Str
      * @param string|array $needles
      * @return bool
      */
-    public static function contains($haystack, $needles)
-    {
+    public static function contains($haystack, $needles) {
         foreach ((array)$needles as $needle) {
             if ($needle != '' && mb_strpos($haystack, $needle) !== false) {
                 return true;
@@ -77,8 +74,7 @@ final class Str
      * @param string|array $needles
      * @return bool
      */
-    public static function endsWith($haystack, $needles)
-    {
+    public static function endsWith($haystack, $needles) {
         foreach ((array)$needles as $needle) {
             if ((string)$needle === static::subString($haystack, -mb_strlen($needle))) {
                 return true;
@@ -96,8 +92,7 @@ final class Str
      * @param string $charset 字符编码
      * @return string
      */
-    public static function subString($value, $start = 0, $length = null, $charset = null)
-    {
+    public static function subString($value, $start = 0, $length = null, $charset = null) {
         if (function_exists("mb_substr"))
             $slice = mb_substr($value, $start, $length, $charset);
         elseif (function_exists('iconv_substr')) {
@@ -125,8 +120,7 @@ final class Str
      * @param string|array $needles
      * @return bool
      */
-    public static function startsWith($haystack, $needles)
-    {
+    public static function startsWith($haystack, $needles) {
         foreach ((array)$needles as $needle) {
             if ($needle != '' && mb_strpos($haystack, $needle) === 0) {
                 return true;
@@ -141,8 +135,7 @@ final class Str
      * @param string $value
      * @return string
      */
-    public static function lower($value)
-    {
+    public static function lower($value) {
         return mb_strtolower($value, 'UTF-8');
     }
 
@@ -152,8 +145,7 @@ final class Str
      * @param string $value
      * @return string
      */
-    public static function upper($value)
-    {
+    public static function upper($value) {
         return mb_strtoupper($value, 'UTF-8');
     }
 
@@ -163,8 +155,7 @@ final class Str
      * @param string $value
      * @return int
      */
-    public static function length($value)
-    {
+    public static function length($value) {
         return mb_strlen($value);
     }
 
@@ -176,8 +167,7 @@ final class Str
      * @param bool $isCache
      * @return string
      */
-    public static function snake($value, $delimiter = '_', $isCache = true)
-    {
+    public static function snake($value, $delimiter = '_', $isCache = true) {
         $key = $value;
 
         if (isset(static::$snakeCache[$key][$delimiter])) {
@@ -196,8 +186,7 @@ final class Str
     /**
      * 清除驼峰转下划线缓存
      */
-    public static function clearSnakeCache()
-    {
+    public static function clearSnakeCache() {
         self::$snakeCache = [];
     }
 
@@ -208,8 +197,7 @@ final class Str
      * @param bool $isCache
      * @return string
      */
-    public static function camel($value, $isCache = true)
-    {
+    public static function camel($value, $isCache = true) {
         if (isset(static::$camelCache[$value])) {
             return static::$camelCache[$value];
         }
@@ -221,8 +209,7 @@ final class Str
     /**
      * 清除下划线转驼峰(首字母小写)缓存
      */
-    public static function clearCamelCache()
-    {
+    public static function clearCamelCache() {
         self::$snakeCache = [];
     }
 
@@ -233,8 +220,7 @@ final class Str
      * @param bool $isCache
      * @return string
      */
-    public static function studly($value, $isCache = true)
-    {
+    public static function studly($value, $isCache = true) {
         $key = $value;
 
         if (isset(static::$studlyCache[$key])) {
@@ -250,8 +236,7 @@ final class Str
     /**
      * 清除下划线转驼峰(首字母大写)缓存
      */
-    public static function clearStudlyCache()
-    {
+    public static function clearStudlyCache() {
         self::$snakeCache = [];
     }
 
@@ -261,8 +246,7 @@ final class Str
      * @param string $value
      * @return string
      */
-    public static function title($value)
-    {
+    public static function title($value) {
         return mb_convert_case($value, MB_CASE_TITLE, 'UTF-8');
     }
 
@@ -274,8 +258,7 @@ final class Str
      * @param string $_input_charset 输入的字符编码
      * @return string
      */
-    public static function charsetEncode($input, $_output_charset, $_input_charset)
-    {
+    public static function charsetEncode($input, $_output_charset, $_input_charset) {
         if (!isset ($_output_charset))
             $_output_charset = $_input_charset;
         if ($_input_charset == $_output_charset || $input == null) {
@@ -298,8 +281,7 @@ final class Str
      * @param string $_output_charset 输出的字符编码
      * @return string
      */
-    public static function charsetDecode($input, $_input_charset, $_output_charset)
-    {
+    public static function charsetDecode($input, $_input_charset, $_output_charset) {
         if ($_input_charset == $_output_charset || $input == null) {
             $output = $input;
         } elseif (function_exists("mb_convert_encoding")) {
@@ -319,8 +301,7 @@ final class Str
      * @param int $type
      * @return string
      */
-    public static function random($length = 16, $type = 5)
-    {
+    public static function random($length = 16, $type = 5) {
         $pool = [
             0 => '0123456789',
             1 => 'abcdefghijklmnopqrstuvwxyz',
@@ -346,8 +327,7 @@ final class Str
      * @param int|null $length
      * @return string
      */
-    public static function substr($string, $start, $length = null)
-    {
+    public static function substr($string, $start, $length = null) {
         return mb_substr($string, $start, $length, 'UTF-8');
     }
 
@@ -357,8 +337,7 @@ final class Str
      * @param string $factor
      * @return string
      */
-    public static function nonceHash32($factor = '')
-    {
+    public static function nonceHash32($factor = '') {
         return md5(uniqid(md5(microtime(true) . $factor), true));
     }
 
@@ -368,8 +347,7 @@ final class Str
      * @param string $prefix
      * @return string
      */
-    public static function makeOrderSn($prefix = '')
-    { // 取出订单编号
+    public static function makeOrderSn($prefix = '') { // 取出订单编号
         $datetime  = date('YmdHis');
         $microtime = explode(' ', microtime());
         $microtime = intval($microtime[0] ? $microtime[0] * 100000 : 100000);
@@ -383,8 +361,7 @@ final class Str
      * @param string $url url地址或URL query参数
      * @return array
      */
-    public static function parseUrlQuery($url)
-    {
+    public static function parseUrlQuery($url) {
         $index = strpos($url, "?");
         $url   = $index === false ? $url : substr($url, $index);
         parse_str($url, $result);
@@ -423,8 +400,7 @@ final class Str
      * @param string $handleFunc 值处理函数
      * @return string
      */
-    public static function buildUrlQuery($params, $handleFunc = null)
-    {
+    public static function buildUrlQuery($params, $handleFunc = null) {
         if (!is_callable($handleFunc)) $handleFunc = function ($key, $val) {
             $type = gettype($val);
             if ($type == 'object' || $type == 'array') return '';
@@ -450,8 +426,7 @@ final class Str
      * @param string $xml
      * @return mixed
      */
-    public static function parseXml($xml)
-    {
+    public static function parseXml($xml) {
         //将XML转为array,禁止引用外部xml实体
         libxml_disable_entity_loader(true);
         $info = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
@@ -466,8 +441,7 @@ final class Str
      * @param string $tag 指定元素标签名称，主要用于索引数组
      * @return string
      */
-    public static function encodeXml($param, $root = 'xml', $tag = '')
-    {
+    public static function encodeXml($param, $root = 'xml', $tag = '') {
         if (!is_array($param) || count($param) <= 0) return '';
 
         $xml = '';
@@ -495,8 +469,7 @@ final class Str
      * @param string $Text 要解析的文本
      * @return mixed|string
      */
-    public static function parseUBB($Text)
-    {
+    public static function parseUBB($Text) {
         $Text = trim($Text);
         $Text = htmlspecialchars($Text);
         $Text = preg_replace("/\\t/is", "  ", $Text);
@@ -539,8 +512,7 @@ final class Str
      * @param $string
      * @return bool
      */
-    public static function is_utf8($string)
-    {
+    public static function is_utf8($string) {
         return preg_match('%^(?:
                     [\x09\x0A\x0D\x20-\x7E] # ASCII
                     | [\xC2-\xDF][\x80-\xBF] # non-overlong 2-byte
@@ -552,63 +524,63 @@ final class Str
                     | \xF4[\x80-\x8F][\x80-\xBF]{2} # plane 16
                     )*$%xs', $string);
     }
-    
+
     /**
-	 * 安全处理-字符串或数组转数组
-	 * @param mixed         $value
-	 * @param string        $format
-	 * @param string        $delimiter
-	 * @param bool|\Closure $filter
-	 * @return array
-	 */
-    public static function explode($value, $format = 'intval', $delimiter = ',', $filter = true){
-		if(!is_array($value)){
-			$value = is_string($value) ? explode($delimiter, $value) : [$value];
-		}
+     * 安全处理-字符串或数组转数组
+     * @param mixed $value
+     * @param string $format
+     * @param string $delimiter
+     * @param bool|\Closure $filter
+     * @return array
+     */
+    public static function explode($value, $format = 'intval', $delimiter = ',', $filter = true) {
+        if (!is_array($value)) {
+            $value = is_string($value) ? explode($delimiter, $value) : [$value];
+        }
 
-		//		foreach($value as $k => &$v){
-		//			if('intval' == $format){
-		//				$v = intval($v);
-		//			}elseif('floatval' == $format){
-		//				$v = floatval($v);
-		//			}elseif('boolval' == $format){
-		//				$v = boolval($v);
-		//			}elseif('long2ip' == $format){
-		//				$v = long2ip($v);
-		//			}
-		//		}
-		//		unset($v);
+        //		foreach($value as $k => &$v){
+        //			if('intval' == $format){
+        //				$v = intval($v);
+        //			}elseif('floatval' == $format){
+        //				$v = floatval($v);
+        //			}elseif('boolval' == $format){
+        //				$v = boolval($v);
+        //			}elseif('long2ip' == $format){
+        //				$v = long2ip($v);
+        //			}
+        //		}
+        //		unset($v);
 
-		$value = array_map($format, $value);
+        $value = array_map($format, $value);
 
-		if($filter !== false){
-			if($filter === true){
-				$value = array_filter($value);
-			}else{
-				$value = array_filter($value, $filter);
-			}
-		}
+        if ($filter !== false) {
+            if ($filter === true) {
+                $value = array_filter($value);
+            } else {
+                $value = array_filter($value, $filter);
+            }
+        }
 
-		return array_values($value);
-	}
+        return array_values($value);
+    }
 
-	/**
-	 * 安全处理-数组转字符串
-	 * @param mixed  $value
-	 * @param string $format
-	 * @param string $delimiter
-	 * @return string
-	 */
-	public static function implode($value, $format = 'intval', $delimiter = ','){
-		//先转换为数组，进行安全过滤
-		$value = self::explode($value, $format, $delimiter);
+    /**
+     * 安全处理-数组转字符串
+     * @param mixed $value
+     * @param string $format
+     * @param string $delimiter
+     * @return string
+     */
+    public static function implode($value, $format = 'intval', $delimiter = ',') {
+        //先转换为数组，进行安全过滤
+        $value = self::explode($value, $format, $delimiter);
 
-		//去除重复
-		$value = array_unique($value);
+        //去除重复
+        $value = array_unique($value);
 
-		//再次转换为字符串
-		return implode(",", $value);
-	}
+        //再次转换为字符串
+        return implode(",", $value);
+    }
 
 
     /**
@@ -617,8 +589,7 @@ final class Str
      * @param $encrypt //传入加密串，在修改密码时做认证
      * @return array/password
      */
-    public static function md5pw($password, $encrypt = '')
-    {
+    public static function md5pw($password, $encrypt = '') {
         $pwd             = [];
         $pwd['encrypt']  = $encrypt ? $encrypt : self::create_randomstr();
         $pwd['password'] = md5(md5(trim($password)) . $pwd['encrypt']);
@@ -649,11 +620,11 @@ final class Str
      * @return string 字符串
      */
 
-    public static function create_randomstr($lenth = 6)
-    {
+    public static function create_randomstr($lenth = 6) {
         return self::random($lenth, 3);
     }
- /**
+
+    /**
      * 产生多个随机汉字
      * 可以创建新用户
      * @param int $num为生成汉字的数量
@@ -662,9 +633,9 @@ final class Str
     public static function getChar($num)  // $num为生成汉字的数量
     {
         $b = '';
-        for ($i=0; $i<$num; $i++) {
-        // 使用chr()函数拼接双字节汉字，前一个chr()为高位字节，后一个为低位字节
-            $a = chr(mt_rand(0xB0,0xD0)).chr(mt_rand(0xA1, 0xF0));
+        for ($i = 0; $i < $num; $i++) {
+            // 使用chr()函数拼接双字节汉字，前一个chr()为高位字节，后一个为低位字节
+            $a = chr(mt_rand(0xB0, 0xD0)) . chr(mt_rand(0xA1, 0xF0));
             // 转码
             $b .= iconv('GB2312', 'UTF-8', $a);
         }
@@ -672,19 +643,18 @@ final class Str
     }
 
     /**
-    * @param $ary 要md5的数组
-    * @return   string     字符串
-    */
-    public static function arrayMD5($ary, $isKsort = true)
-    {
+     * @param $ary 要md5的数组
+     * @return   string     字符串
+     */
+    public static function arrayMD5($ary, $isKsort = true) {
         if ($isKsort) {
             ksort($ary);
         } else {
             krsort($ary);
         }
         $befStr = '';
-        foreach ( $ary as $k => $v ) {
-            if(!empty($v)){
+        foreach ($ary as $k => $v) {
+            if (!empty($v)) {
                 $befStr .= "{$k}={$v}&";
             }
         }
@@ -692,13 +662,12 @@ final class Str
         return MD5($befStr);
     }
 
-      /**
+    /**
      * Generate name based md5 gen_union_id (version 3).
      * @example '7e57d0042b970e7ab45f5387367791cd'
      * @example '6991bfa4b0834538861d3fd6a40aaef0'
      */
-    public static function gen_union_id()
-    {
+    public static function gen_union_id() {
         // fix for compatibility with 32bit architecture; seed range restricted to 62bit
         $seed = mt_rand(0, 2147483647) . '#' . mt_rand(0, 2147483647);
 
@@ -744,8 +713,7 @@ final class Str
         return strtoupper($uuid);
     }
 
-    public static function uuid()
-    {
+    public static function uuid() {
         // fix for compatibility with 32bit architecture; seed range restricted to 62bit
         $seed = mt_rand(0, 2147483647) . '#' . mt_rand(0, 2147483647);
 
@@ -795,8 +763,7 @@ final class Str
      * 判断手机号码格式是否正确
      * @param $email
      */
-    public static function is_mobilephone($mobilephone)
-    {
+    public static function is_mobilephone($mobilephone) {
         return
             strlen($mobilephone) > 9 && preg_match("/^(((13[0-9]{1})|(14[0-9]{1})|(15[0-9]{1})|(17[0-9]{1})|(18[0-9]{1})|(19[0-9]{1}))+\d{8})$/", $mobilephone);
     }
@@ -823,14 +790,13 @@ final class Str
      * 手机号码格式转换【18455667788 转为184-5566-7788】
      * @param type $mobile
      */
-    public static function mobile2string($mobilephone)
-    {
+    public static function mobile2string($mobilephone) {
         if (!self::is_mobilephone($mobilephone)) {
             return false;
         }
-        $char1           = substr($mobilephone, 0, 3);
-        $char2           = substr($mobilephone, 4, 4);
-        $char3           = substr($mobilephone, -4);
+        $char1 = substr($mobilephone, 0, 3);
+        $char2 = substr($mobilephone, 4, 4);
+        $char3 = substr($mobilephone, -4);
         return $char1 . ' ' . $char2 . ' ' . $char3;
     }
 
@@ -860,8 +826,7 @@ final class Str
      * @param $is_all 是否转换全拼 head转换首字母 all转换全拼
      * @return $string
      */
-    public static function zh2pinyin($string, $type = 1, $is_all = 'head')
-    {
+    public static function zh2pinyin($string, $type = 1, $is_all = 'head') {
         if (empty($string)) {
             return '';
         }
@@ -875,7 +840,7 @@ final class Str
         return ucwords($str);
     }
 
-    
+
     /**
      * 查询字符是否存在于某字符串
      *
@@ -895,7 +860,7 @@ final class Str
      * @return string or array
      */
     public static function replace_province($province, $type = 1) {
-        $tmparr = array('北京市' => '北京', '安徽省' => '安徽', '福建省' => '福建', '甘肃省' => '甘肃', '广东省' => '广东', '广西壮族自治区' => '广西', '贵州省' => '贵州', '海南省' => '海南', '河北省' => '河北', '河南省' => '河南', '黑龙江省' => '黑龙江', '湖北省' => '湖北', '湖南省' => '湖南', '吉林省' => '吉林', '江苏省' => '江苏', '江西省' => '江西', '辽宁省' => '辽宁', '内蒙古自治区' => '内蒙古', '宁夏回族自治区' => '宁夏', '青海省' => '青海', '山东省' => '山东', '山西省' => '山西', '陕西省' => '陕西', '上海' => '上海', '四川省' => '四川', '天津' => '天津', '西藏自治区' => '西藏', '新疆维吾尔自治区' => '新疆', '云南省' => '云南', '浙江省' => '浙江', '重庆' => '重庆', '香港特别行政区' => '香港', '澳门特别行政区' => '澳门', '台湾省' => '台湾', '其它' => '其他');
+        $tmparr = ['北京市' => '北京', '安徽省' => '安徽', '福建省' => '福建', '甘肃省' => '甘肃', '广东省' => '广东', '广西壮族自治区' => '广西', '贵州省' => '贵州', '海南省' => '海南', '河北省' => '河北', '河南省' => '河南', '黑龙江省' => '黑龙江', '湖北省' => '湖北', '湖南省' => '湖南', '吉林省' => '吉林', '江苏省' => '江苏', '江西省' => '江西', '辽宁省' => '辽宁', '内蒙古自治区' => '内蒙古', '宁夏回族自治区' => '宁夏', '青海省' => '青海', '山东省' => '山东', '山西省' => '山西', '陕西省' => '陕西', '上海' => '上海', '四川省' => '四川', '天津' => '天津', '西藏自治区' => '西藏', '新疆维吾尔自治区' => '新疆', '云南省' => '云南', '浙江省' => '浙江', '重庆' => '重庆', '香港特别行政区' => '香港', '澳门特别行政区' => '澳门', '台湾省' => '台湾', '其它' => '其他'];
         if ($province) {
             if ($type == 2) {
                 $tmparr = array_flip($tmparr);
@@ -904,11 +869,12 @@ final class Str
         }
         return $tmparr;
     }
+
     /**
      * 截断utf8字符串
      *
-     * @param string $string 
-     * @param int $length ：3 
+     * @param string $string
+     * @param int $length ：3
      * @param string $etc ：'...'
      * @return string
      */
@@ -916,14 +882,14 @@ final class Str
         $result = '';
         $string = html_entity_decode(trim(strip_tags($string)), ENT_QUOTES, 'UTF-8');
         $strlen = strlen($string);
-        for ($i = 0; (($i < $strlen) && ($length > 0)); $i ++) {
+        for ($i = 0; (($i < $strlen) && ($length > 0)); $i++) {
             if ($number = strpos(str_pad(decbin(ord(substr($string, $i, 1))), 8, '0', STR_PAD_LEFT), '0')) {
                 if ($length < 1.0) {
                     break;
                 }
                 $result .= substr($string, $i, $number);
                 $length -= 1.0;
-                $i += $number - 1;
+                $i      += $number - 1;
             } else {
                 $result .= substr($string, $i, 1);
                 $length -= 0.5;
@@ -939,25 +905,25 @@ final class Str
 
     /**
      * 金额转为繁体字（最高到千万元）
-     * @param int $num ：300  
+     * @param int $num ：300
      * @return string 叁佰元
-    */
-    public static function price2zh($num){
+     */
+    public static function price2zh($num) {
         $c1 = "零壹贰叁肆伍陆柒捌玖";
         $c2 = "分角元拾佰仟万拾佰仟亿";
         //精确到分后面就不要了，所以只留两个小数位
-        $num = round($num, 2); 
+        $num = round($num, 2);
         //将数字转化为整数
         $num = $num * 100;
         if (strlen($num) > 10) {
             return "金额太大，请检查";
-        } 
+        }
         $i = 0;
         $c = "";
         while (1) {
             if ($i == 0) {
                 //获取最后一位数字
-                $n = substr($num, strlen($num)-1, 1);
+                $n = substr($num, strlen($num) - 1, 1);
             } else {
                 $n = $num % 10;
             }
@@ -976,26 +942,26 @@ final class Str
             //结束循环
             if ($num == 0) {
                 break;
-            } 
+            }
         }
-        $j = 0;
+        $j    = 0;
         $slen = strlen($c);
         while ($j < $slen) {
             //utf8一个汉字相当3个字符
             $m = substr($c, $j, 6);
             //处理数字中很多0的情况,每次循环去掉一个汉字“零”
             if ($m == '零元' || $m == '零万' || $m == '零亿' || $m == '零零') {
-                $left = substr($c, 0, $j);
+                $left  = substr($c, 0, $j);
                 $right = substr($c, $j + 3);
-                $c = $left . $right;
-                $j = $j-3;
-                $slen = $slen-3;
-            } 
+                $c     = $left . $right;
+                $j     = $j - 3;
+                $slen  = $slen - 3;
+            }
             $j = $j + 3;
-        } 
+        }
         //这个是为了去掉类似23.0中最后一个“零”字
-        if (substr($c, strlen($c)-3, 3) == '零') {
-            $c = substr($c, 0, strlen($c)-3);
+        if (substr($c, strlen($c) - 3, 3) == '零') {
+            $c = substr($c, 0, strlen($c) - 3);
         }
         //将处理的汉字加上“整”
         return $c;
@@ -1009,12 +975,12 @@ final class Str
      * @user   : user
      * @time   : 2022/3/19/019_11:30
      */
-    public static function filter_punctuation_marks($str){
+    public static function filter_punctuation_marks($str) {
         if (empty($str)) {
             return '';
         }
         $str = urlencode($str);//把需要过滤的字符串进行urlencode编码
-        $str = preg_replace("/(%E3%80%82|%EF%BC%9F|%EF%BC%81|%EF%BC%8C|%E3%80%81|%EF%BC%9B|%EF%BC%9A|%E2%80%9C|%E2%80%9D|%E2%80%98|%E2%80%99|%EF%BC%88|%EF%BC%89|%E3%80%8A|%E3%80%8B|%E3%80%88|%E3%80%89|%E3%80%90|%E3%80%91|%E3%80%8E|%E3%80%8F|%E3%80%8C|%E3%80%8D|%EF%B9%83|%EF%B9%84|%E3%80%94|%E3%80%95|%E2%80%A6|%E2%80%94|%EF%BD%9E|%EF%B9%8F|%EF%BF%A5|%2C|%2F|%3C|%3E|%3F|%3B|%3A|%22|%27|%7C|%5B|%5D|%7B|%7D|%60|%7E|%21|%23|%40|%24|%25|%5E|%26|%2A|%28|%29|%5C)+/",'',$str);//使用preg_replace进行正则替换
+        $str = preg_replace("/(%E3%80%82|%EF%BC%9F|%EF%BC%81|%EF%BC%8C|%E3%80%81|%EF%BC%9B|%EF%BC%9A|%E2%80%9C|%E2%80%9D|%E2%80%98|%E2%80%99|%EF%BC%88|%EF%BC%89|%E3%80%8A|%E3%80%8B|%E3%80%88|%E3%80%89|%E3%80%90|%E3%80%91|%E3%80%8E|%E3%80%8F|%E3%80%8C|%E3%80%8D|%EF%B9%83|%EF%B9%84|%E3%80%94|%E3%80%95|%E2%80%A6|%E2%80%94|%EF%BD%9E|%EF%B9%8F|%EF%BF%A5|%2C|%2F|%3C|%3E|%3F|%3B|%3A|%22|%27|%7C|%5B|%5D|%7B|%7D|%60|%7E|%21|%23|%40|%24|%25|%5E|%26|%2A|%28|%29|%5C)+/", '', $str);//使用preg_replace进行正则替换
         //将替换后的字符串使用urldecode进行解码
         return urldecode($str);
     }

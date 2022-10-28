@@ -129,9 +129,20 @@ final class Curl {
             curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
         }
         $tmpInfo = curl_exec($curl); // 执行操作
-        curl_close($curl); // 关闭CURL会话
+
+
+//        curl_close($curl); // 关闭CURL会话
         //        return json_decode($tmpInfo, true);// 返回数据
-        return $tmpInfo; // 返回数据
+//        return $tmpInfo; // 返回数据
+
+        if(curl_exec($curl) === false)
+        {
+            echo 'Curl error: ' . curl_error($curl);
+        }
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        curl_close($curl);
+
+        return array($httpCode, $tmpInfo);
     }
 
 
@@ -223,6 +234,16 @@ final class Curl {
         $header   = array_merge($header1, $header);
         $jsonData = json_encode($data);
         return self::httpCurl($url, $jsonData, 'POST', true, $header, $timeout);
+    }
+
+    static function httpsCurlPost($url, $data, $timeout, $header = []) {
+        $header1  = [
+            "Content-type:application/x-www-form-urlencoded",
+            "Cache-Control: no-cache",
+            "Pragma: no-cache",
+        ];
+        $header   = array_merge($header1, $header);
+        return self::httpCurl($url, $data, 'POST', true, $header, $timeout);
     }
 
     /**

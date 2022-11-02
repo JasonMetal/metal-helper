@@ -117,11 +117,13 @@ final class Curl {
             if ($method == 'POST') {
                 curl_setopt($curl, CURLOPT_POST, true); //请求方式为post请求
             }
+
             if ($method == 'PUT' || strtoupper($method) == 'DELETE') {
                 curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method); //设置请求方式
             }
             curl_setopt($curl, CURLOPT_POSTFIELDS, $data); //请求数据
         }
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $timeout);     // 设置超时限制防止死循环
         curl_setopt($curl, CURLOPT_TIMEOUT, $timeout); // 设置超时限制防止死循环
         curl_setopt($curl, CURLOPT_HEADER, 0); // 显示返回的Header区域内容
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1); // 获取的信息以文件流的形式返回
@@ -129,20 +131,18 @@ final class Curl {
             curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
         }
         $tmpInfo = curl_exec($curl); // 执行操作
+        curl_close($curl); // 关闭CURL会话
+        //return json_decode($tmpInfo, true);// 返回数据
+        return $tmpInfo; // 返回数据*/
 
-
-//        curl_close($curl); // 关闭CURL会话
-        //        return json_decode($tmpInfo, true);// 返回数据
-//        return $tmpInfo; // 返回数据
-
-        if(curl_exec($curl) === false)
-        {
-            echo 'Curl error: ' . curl_error($curl);
-        }
-        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        curl_close($curl);
-
-        return array($httpCode, $tmpInfo);
+//        if(curl_exec($curl) === false)
+//        {
+//            echo 'Curl error: ' . curl_error($curl);
+//        }
+//        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+//        curl_close($curl);
+//
+//        return array($httpCode, $tmpInfo);
     }
 
 
@@ -236,14 +236,24 @@ final class Curl {
         return self::httpCurl($url, $jsonData, 'POST', true, $header, $timeout);
     }
 
-    static function httpsCurlPost($url, $data, $timeout, $header = []) {
-        $header1  = [
-            "Content-type:application/x-www-form-urlencoded",
-            "Cache-Control: no-cache",
-            "Pragma: no-cache",
+    static function httpsCurlPost($url, $data, $timeout, $header = [], $data_type = "") {
+        $header = empty($header) ? [] : $header;
+        //支持json数据数据提交
+        if ($data_type == 'json') {
+            $post_string = json_encode($data);
+        } elseif ($data_type == 'array') {
+            $post_string = $data;
+        } elseif (is_array($data)) {
+            $post_string = http_build_query($data, '', '&');
+        }
+
+        $header1 = [
+            "content-type" => "application/x-www-form-urlencoded",
+            //            "Cache-Control: no-cache",
+            //            "Pragma: no-cache",
         ];
-        $header   = array_merge($header1, $header);
-        return self::httpCurl($url, $data, 'POST', true, $header, $timeout);
+        $header  = array_merge($header1, $header);
+        return self::httpCurl($url, $post_string, 'POST', true, $header, $timeout);
     }
 
     /**
@@ -263,8 +273,7 @@ final class Curl {
             ],
         ];
         $context = stream_context_create($options);
-        $result  = file_get_contents($url, false, $context);
-        return $result;
+        return file_get_contents($url, false, $context);
     }
 
     /**
@@ -293,9 +302,7 @@ final class Curl {
             ],
         ];
         $context  = stream_context_create($options);
-        $result   = file_get_contents($url, false, $context);
-
-        return $result;
+        return file_get_contents($url, false, $context);
     }
 
 

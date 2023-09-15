@@ -515,7 +515,7 @@ final class Arr {
      * channelLanguage:en
      * deviceId:DB08A85D-52AA-4682-B3FD-1143ACCBE6A6
      * mode:aud
-     * packageName:com.starrylovegame.xtlq.guanfang.ios
+     * packageName:com.xx.xx
      * lastTimeGameId:100
      * equipmentInfo:ios';
      * @return :\think\response\Json
@@ -530,7 +530,7 @@ final class Arr {
                         channelLanguage:en
                         deviceId:DB08A85D-52AA-4682-B3FD-1143ACCBE6A6
                         mode:aud
-                        packageName:com.starrylovegame.xtlq.guanfang.ios
+                        packageName:com.xx.xx
                         lastTimeGameId:100
                         equipmentInfo:ios';
         $tmp      = $log = [];
